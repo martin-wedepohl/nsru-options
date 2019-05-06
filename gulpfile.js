@@ -61,7 +61,7 @@ function css(done) {
 			errLogToConsole: true,
 			outputStyle: 'expanded'
 		}) )
-		.pipe( dest( styleURL ) )   // If want to write uncompressed file
+//		.pipe( dest( styleURL ) )   // If want to write uncompressed file
 		.pipe( sourcemaps.init() )
 		.pipe( sass({
 			errLogToConsole: true,
@@ -86,7 +86,7 @@ function js(done) {
 		.pipe( source( entry ) )
 		.pipe( buffer() )
 		.pipe( gulpif( options.has( 'production' ), stripDebug() ) )
-		.pipe( dest( jsURL ) )      // If want to write uncompressed file
+//		.pipe( dest( jsURL ) )      // If want to write uncompressed file
 		.pipe( sourcemaps.init({ loadMaps: true }) )
 		.pipe( uglify() )
         .pipe( rename( { suffix: '.min' } ) )

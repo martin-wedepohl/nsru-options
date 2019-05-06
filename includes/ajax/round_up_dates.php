@@ -5,8 +5,11 @@ defined('ABSPATH') or die('');
 $action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
 
 switch($action) {
-    case 'days_to_round_up':
-        nsru_days_to_round_up();
+    case 'get_first_year':
+        nsru_get_year_e( 'first' );
+        break;
+    case 'get_year':
+        nsru_get_year_e( 'current' );
         break;
     case 'get_round_up_dates':
         nsru_get_round_up_dates();
@@ -14,6 +17,31 @@ switch($action) {
     case 'get_annual':
         nsru_get_annual();
         break;
+    case 'days_to_round_up':
+        nsru_days_to_round_up();
+        break;
+}
+
+function nsru_get_year( $type ) {
+    $round_up_options = get_option( 'round_up_options' );
+    $first_year = is_array( $round_up_options ) ? ( array_key_exists( 'first_year', $round_up_options ) ? $round_up_options['first_year'] : '' ) : '';
+    $start_date = is_array( $round_up_options ) ? ( array_key_exists( 'start_date', $round_up_options ) ? $round_up_options['start_date'] : '' ) : '';
+    
+    date_default_timezone_set( get_option('timezone_string') );
+
+    if( 'first' === $type ) {
+        return $first_year;
+    } elseif ( 'current' === $type ) {
+        return date( 'Y', strtotime( $start_date ) );
+    }
+    
+    return 0;
+}
+
+function nsru_get_year_e( $type ) {
+    echo nsru_get_year($type);
+
+    die();
 }
 
 function nsru_get_round_up_dates() {
@@ -36,7 +64,8 @@ function nsru_get_round_up_dates() {
 
 function nsru_get_annual() {
     
-    $number = do_shortcode( '[nsru_get_year]' ) - do_shortcode( '[nsru_get_year type="first"]' ) + 1;
+    $number = nsru_get_year( 'current' ) - nsru_get_year( 'first' ) + 1;
+    
     switch( $number % 10 ) {
         case 1:  $suffix = 'st'; break;
         case 2:  $suffix = 'nd'; break;
@@ -83,7 +112,7 @@ function nsru_days_to_round_up() {
         $start    = new DateTime($round_up_start . ' 00:00:00');
         $now      = new DateTime(date('Y-m-d 00:00:00'));
         $interval = $start->diff($now);
-        $days     = $interval->format('%d');
+        $days     = $interval->format('%a');
         if ($days > 0) {
             $retval = "starts in $days days.";
         } else {
@@ -98,7 +127,7 @@ function nsru_days_to_round_up() {
     
     die();
     
-}// nsru_days_to_round_up_ajax_handler
+}// nsru_days_to_round_up
 
 /**
  * Create the date/time format

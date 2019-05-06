@@ -21,21 +21,13 @@ defined( 'ABSPATH' ) or die( '' );
  * @return int Year of the Round Up.
  */
 function nsru_get_year_shortcode( $atts ) {
-    $round_up_options = get_option( 'round_up_options' );
-    $first_year = is_array( $round_up_options ) ? ( array_key_exists( 'first_year', $round_up_options ) ? $round_up_options['first_year'] : '' ) : '';
-    $start_date = is_array( $round_up_options ) ? ( array_key_exists( 'start_date', $round_up_options ) ? $round_up_options['start_date'] : '' ) : '';
-    
-    date_default_timezone_set( get_option('timezone_string') );
-
     $a = shortcode_atts( array( 'type' => 'current' ), $atts, 'nsru_get_year' );
     
     if( 'first' === $a['type'] ) {
-        return $first_year;
+        return '<span class="first_year"></span>';
     } elseif ( 'current' === $a['type'] ) {
-        return date( 'Y', strtotime( $start_date ) );
+        return '<span class="current_year"></span>';
     }
-
-    return 0;
 }
 add_shortcode( 'nsru_get_year', 'nsru_get_year_shortcode' );
 
