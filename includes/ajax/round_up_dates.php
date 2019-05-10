@@ -11,6 +11,9 @@
  *    get_round_up_dates - Get the Round Up dates as a range
  *    get_annual         - Get the number of the Round Up with a suffix st, nd, rd, th
  *    days_to_round_up   - Return the number of days to the Round Up
+ *    get_surcharge      - Get the online ticket surcharge
+ *    get_paypal         - Display the PayPal section
+ *    get_ticket_price   - Display the ticket prices
  *
  * @package   NSRU_Options
  * @author    Original Author <martin.wedepohl@shaw.ca>
@@ -37,6 +40,15 @@ switch ($action) {
         break;
     case 'days_to_round_up':
         nsru_days_to_round_up();
+        break;
+    case 'get_surcharge':
+        nsru_surcharge();
+        break;
+    case 'get_paypal':
+        nsru_paypal();
+        break;
+    case 'get_ticket_price':
+        nsru_price();
         break;
 }
 
@@ -86,6 +98,34 @@ function nsru_create_date_time($date, $time) {
 } // nsru_create_date_time
 
 /**
+ * Get a formatted date for the Round Up.
+ * 
+ * @param string $type   Type of date.        Default 'start'.  Accepts 'start', 'end'.
+ * @param string $format Format for the date. Default 'F j, Y'. Accepts any PHP date format string.
+ * 
+ * @return string Formatted date string
+ */
+function nsru_get_date( $type = 'start', $format = 'F j, Y' ) {
+
+    $round_up_options = get_option( 'round_up_options' );
+
+    date_default_timezone_set( get_option('timezone_string') );
+
+    if( 'start' === $type ) {
+        $round_up_start = is_array( $round_up_options ) ? ( array_key_exists( 'start_date', $round_up_options ) ? $round_up_options['start_date'] : '' ) : '';
+        $timestamp      = strtotime( $round_up_start );
+    } elseif ( 'end' === $type ) {
+        $round_up_end = is_array( $round_up_options ) ? ( array_key_exists( 'end_date',   $round_up_options ) ? $round_up_options['end_date']   : '' ) : '';
+        $timestamp    = strtotime( $round_up_end );
+    } else {
+        $timestamp = strtotime( 'now' );
+    }
+
+    return date( $format, $timestamp );
+
+} // nsru_get_date
+
+/**
  * AJAX call to return the Round Up year
  *
  * Will echo the year and then die
@@ -110,8 +150,8 @@ function nsru_get_year_e($type) {
  */
 function nsru_get_round_up_dates() {
 
-    $start = do_shortcode('[nsru_get_date format="Y F j" type=start]');
-    $end   = do_shortcode('[nsru_get_date format="Y F j" type="end"]');
+    $start = nsru_get_date('start', 'Y F j');
+    $end   = nsru_get_date('end',   'Y F j');
 
     $start_array = explode(' ', $start);
     $end_array   = explode(' ', $end);
@@ -215,3 +255,131 @@ function nsru_days_to_round_up() {
     die();
 
 } // nsru_days_to_round_up()
+
+/**
+ * AJAX handler to echo online ticket surcharge
+ *
+ * This will use the current date and time to see if the discounted prices are still in effect
+ */
+function nsru_surcharge() {
+
+    date_default_timezone_set( get_option('timezone_string') );
+
+    $round_up_options = get_option( 'round_up_options' );
+    $end_date         = is_array( $round_up_options ) ? ( array_key_exists( 'discount_end_date', $round_up_options ) ? $round_up_options['discount_end_date'] : '' ) : '';
+
+    if ( '' === $end_date ) {
+        // If there is no end date then there is no discounted tickets
+        $end_date_ts = strtotime( 'now - 1 day' );
+    } else {
+        $end_date_ts = strtotime( $end_date . ' + 1 day' );
+    }
+
+    $now_ts = time();
+
+    if ( $now_ts >= $end_date_ts ) {
+        // Discounted prices have expired
+        $retval = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge'], 2, '.', '') : '' ) : '';
+    } else {
+        // Discounted prices are in effect
+        $retval = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge_discount', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge_discount'], 2, '.', '') : '' ) : '';
+    }
+
+    echo $retval;
+
+    die();
+
+} // nsru_surcharge()
+
+/**
+ * AJAX handler to echo PayPal code
+ *
+ * This will use the current date and time to see if the discounted prices are still in effect
+ */
+function nsru_paypal() {
+
+    $round_up_options = get_option( 'round_up_options' );
+
+    $enable_paypal = is_array( $round_up_options ) ? ( array_key_exists( 'paypal_enable', $round_up_options ) ? intval($round_up_options['paypal_enable']) : 0 ) : 0;
+
+    if(0 === $enable_paypal) {
+        echo '<p class="paypal_closed">PayPal purchase is now closed. Please pick up your tickets at the event.</p>';
+        die('');
+    }
+
+    date_default_timezone_set( get_option('timezone_string') );
+    $end_date = is_array( $round_up_options ) ? ( array_key_exists( 'discount_end_date', $round_up_options ) ? $round_up_options['discount_end_date'] : '' ) : '';
+
+    if ( '' === $end_date ) {
+        // If there is no end date then there is no discounted tickets
+        $end_date_ts = strtotime( 'now - 1 day' );
+    } else {
+        $end_date_ts = strtotime( $end_date . ' + 1 day' );
+    }
+
+    $now_ts = time();
+
+    if ( $now_ts >= $end_date_ts ) {
+        // Discounted prices have expired
+        $surcharge  = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge'], 2, '.', '') : '' ) : '';
+        $paypalcode =  is_array( $round_up_options ) ? ( array_key_exists( 'paypal_code', $round_up_options ) ? $round_up_options['paypal_code'] : '' ) : '';
+    } else {
+        // Discounted pirces are in effect
+        $surcharge = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge_discount', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge_discount'], 2, '.', '') : '' ) : '';
+        $paypalcode =  is_array( $round_up_options ) ? ( array_key_exists( 'paypal_code_discount', $round_up_options ) ? $round_up_options['paypal_code_discount'] : '' ) : '';
+    }
+
+    if ( '' !== $surcharge ) {
+        $surcharge = "<p class='ticket_surcharge'>Please note there is an additional service charge of $$surcharge when buying tickets on-line.</p>";
+    }
+
+    if ( '' !== $paypalcode ) {
+        $retval  = $surcharge;
+        $retval .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">';
+        $retval .= '<input name="cmd" type="hidden" value="_s-xclick">';
+        $retval .= '<input name="hosted_button_id" type="hidden" value="' . $paypalcode . '">';
+        $retval .= '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" type="image">';
+        $retval .= '<img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0" />';
+        $retval .= '</form>';
+    }
+
+    echo $retval;
+
+    die();
+
+} // nsru_surcharge()
+
+/**
+ * AJAX handler to echo ticket prices
+ */
+function nsru_price() {
+
+    date_default_timezone_set( get_option('timezone_string') );
+
+    $round_up_options = get_option( 'round_up_options' );
+    $end_date = is_array( $round_up_options ) ? ( array_key_exists( 'discount_end_date', $round_up_options ) ? $round_up_options['discount_end_date'] : '' ) : '';
+
+    if ( '' === $end_date ) {
+        // If there is no end date then there is no discounted tickets
+        $end_date_ts = strtotime( 'now - 1 day' );
+    } else {
+        $end_date_ts = strtotime( $end_date . ' + 1 day' );
+    }
+
+    $now_ts = time();
+
+    $price  = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price', $round_up_options ) ? $round_up_options['ticket_price'] : '' ) : '';
+    $retstr = '<p class="round-up-price">The cost to attend the North Shore Round Up will be $' . $price . '.';
+    if ( $now_ts < $end_date_ts ) {
+        // Discounted prices are in effect
+        $end_date = date('F j, Y', $end_date_ts);
+        $price    = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price_discount', $round_up_options ) ? $round_up_options['ticket_price_discount'] : '' ) : '';
+        $retstr  .= "<br /><strong>NOTE:</strong> Tickets are on sale for the discounted price of $$price if you purchase them <strong>before</strong> $end_date.";
+    }
+    $retstr .= '</p>';
+
+    echo $retstr;
+
+    die();
+
+} // nsru_surcharge()

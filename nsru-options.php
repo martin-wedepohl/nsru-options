@@ -414,3 +414,5 @@ require_once 'includes/cpt/rooms_cpt.php';
 require_once 'includes/ajax/round_up_dates.php';
 require_once 'includes/ajax/speakers.php';
 require_once 'includes/ajax/meetings.php';
+require_once 'includes/ajax/committee.php';
+require_once 'includes/ajax/past_chairs.php';

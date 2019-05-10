@@ -54,43 +54,6 @@ function nsru_get_annual_shortcode() {
 add_shortcode( 'nsru_get_annual', 'nsru_get_annual_shortcode' );
 
 /**
- * Get a formatted date for the Round Up.
- *
- * @param  array $atts {
- *     Optional array of arguments.
- *     @param string format Format for the date. Default 'F j, Y'. Accepts any PHP date format string.
- *     @param string type   Type of year.        Default 'start'.  Accepts 'start', 'end'.
- * }
- *
- * @return string Round Up date
- */
-function nsru_get_date_shortcode( $atts ) {
-
-    $round_up_options = get_option( 'round_up_options' );
-
-    date_default_timezone_set( get_option('timezone_string') );
-
-    $a = shortcode_atts( array(
-        'format' => 'F j, Y',
-        'type'   => 'start',
-    ), $atts, 'nsru_get_date' );
-
-    if( 'start' === $a['type'] ) {
-        $round_up_start = is_array( $round_up_options ) ? ( array_key_exists( 'start_date', $round_up_options ) ? $round_up_options['start_date'] : '' ) : '';
-        $timestamp      = strtotime( $round_up_start );
-    } elseif ( 'end' === $a['type'] ) {
-        $round_up_end = is_array( $round_up_options ) ? ( array_key_exists( 'end_date',   $round_up_options ) ? $round_up_options['end_date']   : '' ) : '';
-        $timestamp    = strtotime( $round_up_end );
-    } else {
-        $timestamp = strtotime( 'now' );
-    }
-
-    return date( $a['format'], $timestamp );
-
-} // nsru_get_date_shortcode
-add_shortcode( 'nsru_get_date', 'nsru_get_date_shortcode' );
-
-/**
  * Returns a span that AJAX can populate with the number of days to the round up or if it is on or if it is over.
  *
  * @return string Number of days to the Round Up.
@@ -134,34 +97,8 @@ add_shortcode( 'nsru_get_speakers', 'nsru_get_speakers_shortcode' );
  * @return string
  */
 function nsru_get_surcharge_shortcode() {
-
-    date_default_timezone_set( get_option('timezone_string') );
-
-    $round_up_options = get_option( 'round_up_options' );
-    $end_date         = is_array( $round_up_options ) ? ( array_key_exists( 'discount_end_date', $round_up_options ) ? $round_up_options['discount_end_date'] : '' ) : '';
-
-    if ( '' === $end_date ) {
-        // If there is no end date then there is no discounted tickets
-        $end_date_ts = strtotime( 'now - 1 day' );
-    } else {
-        $end_date_ts = strtotime( $end_date . ' + 1 day' );
-    }
-
-    $now_ts = time();
-
-    if ( $now_ts >= $end_date_ts ) {
-        // Discounted prices have expired
-        $surcharge = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge'], 2, '.', '') : '' ) : '';
-    } else {
-        // Discounted pirces are in effect
-        $surcharge = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge_discount', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge_discount'], 2, '.', '') : '' ) : '';
-    }
-
-    if ( '' !== $surcharge ) {
-        $surcharge = '<span class="surcharge">$' . $surcharge . '</span>';
-    }
-
-    return $surcharge;
+    
+    return '<span class="surcharge"></span>';
 
 } // nsru_get_surcharge_shortcode
 add_shortcode( 'nsru_get_surcharge', 'nsru_get_surcharge_shortcode' );
@@ -176,31 +113,7 @@ add_shortcode( 'nsru_get_surcharge', 'nsru_get_surcharge_shortcode' );
  */
 function nsru_get_price_shortcode() {
 
-    date_default_timezone_set( get_option('timezone_string') );
-
-    $round_up_options = get_option( 'round_up_options' );
-    $end_date = is_array( $round_up_options ) ? ( array_key_exists( 'discount_end_date', $round_up_options ) ? $round_up_options['discount_end_date'] : '' ) : '';
-
-    if ( '' === $end_date ) {
-        // If there is no end date then there is no discounted tickets
-        $end_date_ts = strtotime( 'now - 1 day' );
-    } else {
-        $end_date_ts = strtotime( $end_date . ' + 1 day' );
-    }
-
-    $now_ts = time();
-
-    $price  = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price', $round_up_options ) ? $round_up_options['ticket_price'] : '' ) : '';
-    $retstr = '<p class="round-up-price">The cost to attend the North Shore Round Up will be $' . $price . '.';
-    if ( $now_ts < $end_date_ts ) {
-        // Discounted prices are in effect
-        $end_date = date('F j, Y', $end_date_ts);
-        $price    = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price_discount', $round_up_options ) ? $round_up_options['ticket_price_discount'] : '' ) : '';
-        $retstr  .= "<br /><strong>NOTE:</strong> Tickets are on sale for the discounted price of $$price if you purchase them <strong>before</strong> $end_date.";
-    }
-    $retstr .= '</p>';
-
-    return $retstr;
+    return '<span class="price"></span>';
 
 } // nsru_get_price_shortcode
 add_shortcode( 'nsru_get_price', 'nsru_get_price_shortcode' );
@@ -214,51 +127,7 @@ add_shortcode( 'nsru_get_price', 'nsru_get_price_shortcode' );
  */
 function nsru_get_paypal_shortcode() {
 
-    $round_up_options = get_option( 'round_up_options' );
-
-    $enable_paypal = is_array( $round_up_options ) ? ( array_key_exists( 'paypal_enable', $round_up_options ) ? intval($round_up_options['paypal_enable']) : 0 ) : 0;
-
-    if(0 === $enable_paypal) {
-        return '<p class="paypal_closed">PayPal purchase is now closed. Please pick up your tickets at the event.</p>';
-    }
-
-    date_default_timezone_set( get_option('timezone_string') );
-    $end_date = is_array( $round_up_options ) ? ( array_key_exists( 'discount_end_date', $round_up_options ) ? $round_up_options['discount_end_date'] : '' ) : '';
-
-    if ( '' === $end_date ) {
-        // If there is no end date then there is no discounted tickets
-        $end_date_ts = strtotime( 'now - 1 day' );
-    } else {
-        $end_date_ts = strtotime( $end_date . ' + 1 day' );
-    }
-
-    $now_ts = time();
-
-    if ( $now_ts >= $end_date_ts ) {
-        // Discounted prices have expired
-        $surcharge  = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge'], 2, '.', '') : '' ) : '';
-        $paypalcode =  is_array( $round_up_options ) ? ( array_key_exists( 'paypal_code', $round_up_options ) ? $round_up_options['paypal_code'] : '' ) : '';
-    } else {
-        // Discounted pirces are in effect
-        $surcharge = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge_discount', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge_discount'], 2, '.', '') : '' ) : '';
-        $paypalcode =  is_array( $round_up_options ) ? ( array_key_exists( 'paypal_code_discount', $round_up_options ) ? $round_up_options['paypal_code_discount'] : '' ) : '';
-    }
-
-    if ( '' !== $surcharge ) {
-        $surcharge = "<p class='ticket_surcharge'>Please note there is an additional service charge of $$surcharge when buying tickets on-line.</p>";
-    }
-
-    if ( '' !== $paypalcode ) {
-        $retval  = $surcharge;
-        $retval .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">';
-        $retval .= '<input name="cmd" type="hidden" value="_s-xclick">';
-        $retval .= '<input name="hosted_button_id" type="hidden" value="' . $paypalcode . '">';
-        $retval .= '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" type="image">';
-        $retval .= '<img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0" />';
-        $retval .= '</form>';
-    }
-
-    return $retval;
+    return '<span class="paypal"></span>';
 
 } // nsru_get_paypal_shortcode
 add_shortcode( 'nsru_get_paypal', 'nsru_get_paypal_shortcode' );
@@ -296,32 +165,7 @@ add_shortcode( 'nsru_get_how_paypal_works', 'nsru_get_how_paypal_works_shortcode
  */
 function nsru_past_chairs_shortcode() {
 
-    $round_up_options = get_option( 'round_up_options' );
-    $start_year = is_array( $round_up_options ) ? ( array_key_exists( 'first_year', $round_up_options ) ? intval($round_up_options['first_year']) : 0 ) : 0;
-
-    $posts = get_posts(array(
-        'post_type'   => 'nsru_pastchairs',
-        'post_status' => 'publish',
-        'numberposts' => -1,
-        'order'       => 'ASC',
-    ));
-
-    $retstr = '<div class="pastchairstitle">Past Chairs of the North Shore Round Up:</div><div class="pastchairs"><table><tbody>';
-    foreach($posts as $post) {
-        $title = get_the_title($post->ID);
-        $meta = get_post_meta( $post->ID, NSRU_PastChairs::GetMetaKey(), false );
-        $year = intval($meta[0]);
-        $num  = $year - $start_year + 1;
-        if($num > 1 && 1 == $num % 4) {
-            $retstr .= '</tr><tr>';
-        } elseif (1 === $num) {
-            $retstr .= '<tr>';
-        }
-        $retstr .= "<td>$num: $year - $title</td>";
-    }
-    $retstr .= '</tr></tbody></table></div><!-- /.pastchairs -->';
-
-    return $retstr;
+    return '<span class="nsru_past_chairs"></span>';
 
 } // nsru_past_chairs_shortcode
 add_shortcode( 'nsru_past_chairs', 'nsru_past_chairs_shortcode' );
@@ -333,33 +177,7 @@ add_shortcode( 'nsru_past_chairs', 'nsru_past_chairs_shortcode' );
  */
 function nsru_committee_shortcode() {
 
-    $round_up_options = get_option( 'round_up_options' );
-
-    $posts = get_posts(array(
-        'post_type'   => 'nsru_committee',
-        'post_status' => 'publish',
-        'numberposts' => -1,
-        'order'       => 'DESC',
-    ));
-
-    $retstr = '<div class="committee"><table><tbody>';
-    $first = true;
-    foreach($posts as $post) {
-        $title = get_the_title($post->ID);
-        $meta  = get_post_meta( $post->ID, NSRU_Committee::GetMetaKey(), true );
-        $name  = (0 === strlen($meta['name'])) ? '<strong>POSITION OPEN</strong>' : $meta['name'];
-        $group = (0 === strlen($meta['group'])) ? '-----' : $meta['group'];
-        if (true === $first) {
-            $retstr .= '<tr>';
-            $first   = false;
-        } else {
-            $retstr .= '</tr><tr>';
-        }
-        $retstr .= "<td>$title</td><td>$name</td><td>$group</td>";
-    }
-    $retstr .= '</tr></tbody></table></div><!-- /.committee -->';
-
-    return $retstr;
+    return '<span class="nsru_committee"></span>';
 
 } // nsru_committee_shortcode
 add_shortcode( 'nsru_committee', 'nsru_committee_shortcode' );
