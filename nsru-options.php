@@ -16,7 +16,7 @@ class NSRU_Options_Plugin {
 
     /**
      * Constructor for the plugin class.
-     * 
+     *
      * Performs all the enqueing, add actions and registration for the class.
      * Since this plugin uses the jQuery DatePicker that needs to be enqueued.
      */
@@ -46,7 +46,8 @@ class NSRU_Options_Plugin {
 
         // Add Google Analytics to head
         add_action('wp_head', array($this, 'add_analytics_in_header'), 100);
-    }
+
+    } // __construct
 
     /**
      * Create and add the plugin options page.
@@ -57,26 +58,28 @@ class NSRU_Options_Plugin {
         $page_title = __('North Shore Round Up Options', 'nsru-options');
         $menu_title = __('NSRU Options', 'nsru-options');
         $capability = 'manage_options';
-        $slug = 'nsru-options';
-        $callback = array($this, 'settings_page_content');
-        $icon = 'dashicons-admin-generic';
-        $position = 100;
+        $slug       = 'nsru-options';
+        $callback   = array($this, 'settings_page_content');
+        $icon       = 'dashicons-admin-generic';
+        $position   = 100;
 
         add_menu_page($page_title, $menu_title, $capability, $slug, $callback, $icon, $position);
-    }
+
+    } // create_options_page
 
     /**
      * Add the sections used on the options page.
      */
     public function setup_sections() {
 
-        add_settings_section('dates_section', __('Round Up Dates', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
-        add_settings_section('prices_section', __('Round Up Prices', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
-        add_settings_section('discounts_section', __('Round Up Discounts', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
-        add_settings_section('hotel_section', __('Round Up Hotel', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
-        add_settings_section('enable_section', __('Enable NSRU Options', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
-        add_settings_section('tracking_section', __('Tracking Codes', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
-    }
+        add_settings_section('dates_section',     __('Round Up Dates', 'nsru-options'),      array($this, 'section_callback'), 'nsru-options');
+        add_settings_section('prices_section',    __('Round Up Prices', 'nsru-options'),     array($this, 'section_callback'), 'nsru-options');
+        add_settings_section('discounts_section', __('Round Up Discounts', 'nsru-options'),  array($this, 'section_callback'), 'nsru-options');
+        add_settings_section('hotel_section',     __('Round Up Hotel', 'nsru-options'),      array($this, 'section_callback'), 'nsru-options');
+        add_settings_section('enable_section',    __('Enable NSRU Options', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
+        add_settings_section('tracking_section',  __('Tracking Codes', 'nsru-options'),      array($this, 'section_callback'), 'nsru-options');
+
+    } // setup_sections
 
     /**
      * Create the fields and assign them to a specific section.
@@ -85,198 +88,197 @@ class NSRU_Options_Plugin {
 
         $fields = array(
             array(
-                'uid' => 'first_year',
-                'label' => __('Round Up First Year', 'nsru-options'),
+                'uid'     => 'first_year',
+                'label'   => __('Round Up First Year', 'nsru-options'),
                 'section' => 'dates_section',
-                'type' => 'number',
-                'min' => 1935,
-                'max' => 2200,
-                'step' => 1,
-                'class' => 'regular-text',
-                'helper' => __('(first year of Round Up)', 'nsru-options'),
+                'type'    => 'number',
+                'min'     => 1935,
+                'max'     => 2200,
+                'step'    => 1,
+                'class'   => 'regular-text',
+                'helper'  => __('(first year of Round Up)', 'nsru-options'),
             ),
             array(
-                'uid' => 'start_date',
-                'label' => __('Start Date for Round Up', 'nsru-options'),
-                'section' => 'dates_section',
-                'type' => 'text',
-                'class' => 'nsrudate regular-text',
+                'uid'         => 'start_date',
+                'label'       => __('Start Date for Round Up', 'nsru-options'),
+                'section'     => 'dates_section',
+                'type'        => 'text',
+                'class'       => 'nsrudate regular-text',
                 'placeholder' => __('Start Date', 'nsru-options'),
             ),
             array(
-                'uid' => 'start_time',
-                'label' => __('Start Time for Round Up', 'nsru-options'),
+                'uid'     => 'start_time',
+                'label'   => __('Start Time for Round Up', 'nsru-options'),
                 'section' => 'dates_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 23,
-                'step' => 1,
-                'class' => 'regular-text',
-                'helper' => __('(start hour of Round Up)', 'nsru-options'),
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 23,
+                'step'    => 1,
+                'class'   => 'regular-text',
+                'helper'  => __('(start hour of Round Up)', 'nsru-options'),
             ),
             array(
-                'uid' => 'end_date',
-                'label' => __('End Date for Round Up', 'nsru-options'),
-                'section' => 'dates_section',
-                'type' => 'text',
-                'class' => 'nsrudate regular-text',
+                'uid'         => 'end_date',
+                'label'       => __('End Date for Round Up', 'nsru-options'),
+                'section'     => 'dates_section',
+                'type'        => 'text',
+                'class'       => 'nsrudate regular-text',
                 'placeholder' => __('End Date', 'nsru-options'),
             ),
             array(
-                'uid' => 'end_time',
-                'label' => __('End Time for Round Up', 'nsru-options'),
+                'uid'     => 'end_time',
+                'label'   => __('End Time for Round Up', 'nsru-options'),
                 'section' => 'dates_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 23,
-                'step' => 1,
-                'class' => 'regular-text',
-                'helper' => __('(end hour of Round Up)', 'nsru-options'),
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 23,
+                'step'    => 1,
+                'class'   => 'regular-text',
+                'helper'  => __('(end hour of Round Up)', 'nsru-options'),
             ),
             array(
-                'uid' => 'ticket_price',
-                'label' => __('Ticket price for Round Up ($)', 'nsru-options'),
+                'uid'     => 'ticket_price',
+                'label'   => __('Ticket price for Round Up ($)', 'nsru-options'),
                 'section' => 'prices_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 200,
-                'step' => 1,
-                'class' => 'regular-text',
-                'helper' => __('(Actual ticket price)', 'nsru-options'),
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 200,
+                'step'    => 1,
+                'class'   => 'regular-text',
+                'helper'  => __('(Actual ticket price)', 'nsru-options'),
             ),
             array(
-                'uid' => 'online_surcharge',
-                'label' => __('PayPal Surcharge ($)', 'nsru-options'),
+                'uid'     => 'online_surcharge',
+                'label'   => __('PayPal Surcharge ($)', 'nsru-options'),
                 'section' => 'prices_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 5,
-                'step' => 0.01,
-                'class' => 'regular-text',
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 5,
+                'step'    => 0.01,
+                'class'   => 'regular-text',
             ),
             array(
-                'uid' => 'paypal_code',
-                'label' => __('PayPal Purchase Code', 'nsru-options'),
-                'section' => 'prices_section',
-                'type' => 'text',
-                'class' => 'regular-text',
+                'uid'          => 'paypal_code',
+                'label'        => __('PayPal Purchase Code', 'nsru-options'),
+                'section'      => 'prices_section',
+                'type'         => 'text',
+                'class'        => 'regular-text',
                 'supplimental' => __('Found in the hosted_button_id value of the PayPal Buy Now button'),
             ),
             array(
-                'uid' => 'discount_end_date',
-                'label' => __('End Date for discounted tickets', 'nsru-options'),
+                'uid'     => 'discount_end_date',
+                'label'   => __('End Date for discounted tickets', 'nsru-options'),
                 'section' => 'discounts_section',
-                'type' => 'text',
-                'class' => 'nsrudate regular-text',
+                'type'    => 'text',
+                'class'   => 'nsrudate regular-text',
             ),
             array(
-                'uid' => 'ticket_price_discount',
-                'label' => __('Discounted ticket price for Round Up ($)', 'nsru-options'),
+                'uid'     => 'ticket_price_discount',
+                'label'   => __('Discounted ticket price for Round Up ($)', 'nsru-options'),
                 'section' => 'discounts_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 200,
-                'step' => 1,
-                'class' => 'regular-text',
-                'helper' => __('(Discounted ticket price)', 'nsru-options'),
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 200,
+                'step'    => 1,
+                'class'   => 'regular-text',
+                'helper'  => __('(Discounted ticket price)', 'nsru-options'),
             ),
             array(
-                'uid' => 'online_surcharge_discount',
-                'label' => __('Discount Ticket PayPal Surcharge ($)', 'nsru-options'),
+                'uid'     => 'online_surcharge_discount',
+                'label'   => __('Discount Ticket PayPal Surcharge ($)', 'nsru-options'),
                 'section' => 'discounts_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 5,
-                'step' => 0.01,
-                'class' => 'regular-text',
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 5,
+                'step'    => 0.01,
+                'class'   => 'regular-text',
             ),
             array(
-                'uid' => 'paypal_code_discount',
-                'label' => __('PayPal Discount Purchase Code', 'nsru-options'),
-                'section' => 'discounts_section',
-                'type' => 'text',
-                'class' => 'regular-text',
+                'uid'          => 'paypal_code_discount',
+                'label'        => __('PayPal Discount Purchase Code', 'nsru-options'),
+                'section'      => 'discounts_section',
+                'type'         => 'text',
+                'class'        => 'regular-text',
                 'supplimental' => __('Found in the hosted_button_id value of the PayPal Buy Now button'),
             ),
             array(
-                'uid' => 'hotel_booking_code',
-                'label' => __('Hotel Booking Code', 'nsru-options'),
+                'uid'     => 'hotel_booking_code',
+                'label'   => __('Hotel Booking Code', 'nsru-options'),
                 'section' => 'hotel_section',
-                'type' => 'text',
-                'class' => 'regular-text',
+                'type'    => 'text',
+                'class'   => 'regular-text',
             ),
             array(
-                'uid' => 'hotel_booking_website',
-                'label' => __('Hotel Booking Website', 'nsru-options'),
+                'uid'     => 'hotel_booking_website',
+                'label'   => __('Hotel Booking Website', 'nsru-options'),
                 'section' => 'hotel_section',
-                'type' => 'text',
-                'class' => 'regular-text',
+                'type'    => 'text',
+                'class'   => 'regular-text',
             ),
             array(
-                'uid' => 'hotel_special_price',
-                'label' => __('Hotel Special Price ($)', 'nsru-options'),
+                'uid'     => 'hotel_special_price',
+                'label'   => __('Hotel Special Price ($)', 'nsru-options'),
                 'section' => 'hotel_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 500,
-                'step' => 1,
-                'class' => 'regular-text',
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 500,
+                'step'    => 1,
+                'class'   => 'regular-text',
             ),
             array(
-                'uid' => 'hotel_harbour_special_price',
-                'label' => __('Hotel Harbour View Special Price ($)', 'nsru-options'),
+                'uid'     => 'hotel_harbour_special_price',
+                'label'   => __('Hotel Harbour View Special Price ($)', 'nsru-options'),
                 'section' => 'hotel_section',
-                'type' => 'number',
-                'min' => 0,
-                'max' => 500,
-                'step' => 1,
-                'class' => 'regular-text',
+                'type'    => 'number',
+                'min'     => 0,
+                'max'     => 500,
+                'step'    => 1,
+                'class'   => 'regular-text',
             ),
             array(
-                'uid' => 'paypal_enable',
-                'label' => __('Enable PayPal Button', 'nsru-options'),
+                'uid'     => 'paypal_enable',
+                'label'   => __('Enable PayPal Button', 'nsru-options'),
                 'section' => 'enable_section',
-                'type' => 'checkbox',
+                'type'    => 'checkbox',
                 'options' => array(1 => 'Yes'),
             ),
             array(
-                'uid' => 'hotel_enable',
-                'label' => __('Enable Hotel Room Rate', 'nsru-options'),
+                'uid'     => 'hotel_enable',
+                'label'   => __('Enable Hotel Room Rate', 'nsru-options'),
                 'section' => 'enable_section',
-                'type' => 'checkbox',
+                'type'    => 'checkbox',
                 'options' => array(1 => 'Yes'),
             ),
             array(
-                'uid' => 'hotel_harbour_enable',
-                'label' => __('Enable Harbour View Room Rate', 'nsru-options'),
+                'uid'     => 'hotel_harbour_enable',
+                'label'   => __('Enable Harbour View Room Rate', 'nsru-options'),
                 'section' => 'enable_section',
-                'type' => 'checkbox',
+                'type'    => 'checkbox',
                 'options' => array(1 => 'Yes'),
             ),
             array(
-                'uid' => 'analytics_code',
-                'label' => __('Google Analytics Code', 'nsru-options'),
+                'uid'     => 'analytics_code',
+                'label'   => __('Google Analytics Code', 'nsru-options'),
                 'section' => 'tracking_section',
-                'type' => 'text',
-                'class' => 'regular-text',
+                'type'    => 'text',
+                'class'   => 'regular-text',
             ),
         );
 
         foreach ($fields as $field) {
             add_settings_field($field['uid'], $field['label'], array($this, 'field_callback'), 'nsru-options', $field['section'], $field);
         }
-    }
 
-// End setup_fields
+    } // setup_fields
 
     /**
      * Display a specific field.
-     * 
+     *
      * Options are stored in serialized format in the database.
      * The value is extracted and used if it exists already in the database.
-     * 
+     *
      * Based on the type of field print the appropriate field.
-     * 
+     *
      * @param array $arguments Arguments for the field.
      */
     public function field_callback($arguments) {
@@ -332,27 +334,28 @@ class NSRU_Options_Plugin {
         if ($supplimental = $arguments['supplimental']) {
             printf('<p class="description">%s</p>', $supplimental);
         }
-    }
 
-// End field_callback
+    } // field_callback
 
     /**
      * HTML page used to display the options.
      */
     public function settings_page_content() {
+
         require_once 'includes/nsru-options-settings.php';
-    }
+
+    } // settings_page_content
 
     /**
      * Callback to display the section.
-     * 
+     *
      * Not used since an HTML page (above is used)
-     * 
+     *
      * @param array $arguments
      */
     public function section_callback($arguments) {
-        
-    }
+
+    } // section_callback
 
     /**
      * Add the datepicker script to the footer.
@@ -367,81 +370,7 @@ class NSRU_Options_Plugin {
             /* ]]> */
         </script>
         <?php
-    }
-
-    /**
-     * Add the script to the footer.
-     */
-    function add_footer_js() {
-        ?>
-        <script>
-//            /* <![CDATA[ */
-//            jQuery(document).ready(function ($) {
-//                $.ajax({
-//                    url: 'ajax/round_up_dates.php', 
-//                    data: {action: 'days_to_round_up'}, 
-//                    type: 'POST', 
-//                    success: function ($result) {
-//                        if ($result) {
-//                            $('.days_to_round_up').html($result);
-//                            $( document.body ).trigger( 'post-load' );
-//                        }
-//                    }
-//                });
-//                
-//                $.ajax({
-//                    url: 'ajax/speakers.php', 
-//                    data: {action: 'get_speakers'}, 
-//                    type: 'POST', 
-//                    success: function ($result) {
-//                        if ($result) {
-//                            $('.speakers').html($result);
-//                            $( document.body ).trigger( 'post-load' );
-//                        }
-//                    }
-//                });
-//                
-//                $.ajax({
-//                    url: 'ajax/round_up_dates.php', 
-//                    data: {action: 'get_annual'}, 
-//                    type: 'POST', 
-//                    success: function ($result) {
-//                        if ($result) {
-//                            $('.annual').html($result);
-//                            $( document.body ).trigger( 'post-load' );
-//                        }
-//                    }
-//                });
-//                
-//                $.ajax({
-//                    url: 'ajax/round_up_dates.php', 
-//                    data: {action: 'get_round_up_dates'}, 
-//                    type: 'POST', 
-//                    success: function ($result) {
-//                        if ($result) {
-//                            $('.round_up_dates').html($result);
-//                            $( document.body ).trigger( 'post-load' );
-//                        }
-//                    }
-//                });
-//                
-//                $.ajax({
-//                    url: '/wp-admin/meetings.php', 
-//                    data: {action: 'get_meetings'}, 
-//                    type: 'POST', 
-//                    success: function ($result) {
-//                        if ($result) {
-//                            $('.meetings').html($result);
-//                            $( document.body ).trigger( 'post-load' );
-//                        }
-//                    }
-//                });
-//                
-//            });
-//            /* ]]> */
-        </script>
-        <?php
-    }
+    } // add_admin_footer_js
 
     /**
      * Add the Google Analytics Script into the header
@@ -467,12 +396,11 @@ class NSRU_Options_Plugin {
             <!-- End Google Analytics -->
             <?php
         }
-    }
 
-    
-}
+    } // add_analytics_in_header
 
-// End class NSRU_Options_Plugin
+
+} // class NSRU_Options_Plugin
 
 new NSRU_Options_Plugin();
 

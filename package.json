@@ -1,11 +1,11 @@
 {
 	"name": "test-gulp",
 	"version": "1.0.0",
-	"description": "Testing Gulp",
-	"author": "Martin Wedepohl <martin.wedepohl@shaw.ca> (http://)",
+	"description": "NSRU Options Plugin",
+	"author": "Martin Wedepohl <martin.wedepohl@shaw.ca> (http://wedepohlengineering.com)",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/"
+		"url": "https://github.com/martin-wedepohl/nsru-options"
 	},
 	"keywords": [
 		"PHP",
