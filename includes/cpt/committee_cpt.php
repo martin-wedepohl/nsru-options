@@ -91,7 +91,7 @@ class NSRU_Committee {
             'exclude_from_search' => true,
             'publicly_queryable'  => false,
             'show_ui'             => true,
-            'show_in_menu'        => true,
+            'show_in_menu'        => 'nsru-options',
             'menu_position'       => 200,
             'menu_icon'           => 'dashicons-nametag',
             'query_var'           => false,

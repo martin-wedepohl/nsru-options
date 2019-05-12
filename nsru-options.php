@@ -36,6 +36,9 @@ class NSRU_Options_Plugin {
 
         // Hook into the admin menu.
         add_action('admin_menu', array($this, 'create_options_page'));
+        
+        // Custom submenu order
+        add_filter( 'custom_menu_order', array($this, 'reorder_submenu'));
 
         // Add Settings and Fields.
         add_action('admin_init', array($this, 'setup_sections'));
@@ -64,19 +67,51 @@ class NSRU_Options_Plugin {
         $position   = 100;
 
         add_menu_page($page_title, $menu_title, $capability, $slug, $callback, $icon, $position);
+        add_submenu_page($slug, $page_title, $menu_title, $capability, $slug, $callback);
 
     } // create_options_page
+    
+    /**
+     * Reorder the submenu so that the NSRU Options is the first item in the submenu
+     * 
+     * @global array $submenu
+     * 
+     * @param type $menu_order
+     */
+    public function reorder_submenu( $menu_order ) {
+        global $submenu;
+        
+        $custom = null;
+        
+        $search_item = __('NSRU Options', 'nsru-options');
+        
+        foreach( $submenu['nsru-options'] as $index => $item ) {
+            if( $search_item === $item[0] ) {
+                $custom = $item;
+                unset( $submenu['nsru-options'][$index]);
+                break;
+            }
+        }
+        
+        if( null !== $custom ) {
+            // Push to beginning of array
+            array_unshift( $submenu['nsru-options'], $custom );
+        }
+        
+        return $menu_order;
+        
+    } // reorder_submenu
 
     /**
      * Add the sections used on the options page.
      */
     public function setup_sections() {
 
+        add_settings_section('enable_section',    __('Enable NSRU Options', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         add_settings_section('dates_section',     __('Round Up Dates', 'nsru-options'),      array($this, 'section_callback'), 'nsru-options');
         add_settings_section('prices_section',    __('Round Up Prices', 'nsru-options'),     array($this, 'section_callback'), 'nsru-options');
         add_settings_section('discounts_section', __('Round Up Discounts', 'nsru-options'),  array($this, 'section_callback'), 'nsru-options');
         add_settings_section('hotel_section',     __('Round Up Hotel', 'nsru-options'),      array($this, 'section_callback'), 'nsru-options');
-        add_settings_section('enable_section',    __('Enable NSRU Options', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         add_settings_section('tracking_section',  __('Tracking Codes', 'nsru-options'),      array($this, 'section_callback'), 'nsru-options');
 
     } // setup_sections
@@ -87,6 +122,27 @@ class NSRU_Options_Plugin {
     public function setup_fields() {
 
         $fields = array(
+            array(
+                'uid'     => 'paypal_enable',
+                'label'   => __('Enable PayPal Button', 'nsru-options'),
+                'section' => 'enable_section',
+                'type'    => 'checkbox',
+                'options' => array(1 => 'Yes'),
+            ),
+            array(
+                'uid'     => 'hotel_enable',
+                'label'   => __('Enable Hotel Room Rate', 'nsru-options'),
+                'section' => 'enable_section',
+                'type'    => 'checkbox',
+                'options' => array(1 => 'Yes'),
+            ),
+            array(
+                'uid'     => 'hotel_harbour_enable',
+                'label'   => __('Enable Harbour View Room Rate', 'nsru-options'),
+                'section' => 'enable_section',
+                'type'    => 'checkbox',
+                'options' => array(1 => 'Yes'),
+            ),
             array(
                 'uid'     => 'first_year',
                 'label'   => __('Round Up First Year', 'nsru-options'),
@@ -236,27 +292,6 @@ class NSRU_Options_Plugin {
                 'class'   => 'regular-text',
             ),
             array(
-                'uid'     => 'paypal_enable',
-                'label'   => __('Enable PayPal Button', 'nsru-options'),
-                'section' => 'enable_section',
-                'type'    => 'checkbox',
-                'options' => array(1 => 'Yes'),
-            ),
-            array(
-                'uid'     => 'hotel_enable',
-                'label'   => __('Enable Hotel Room Rate', 'nsru-options'),
-                'section' => 'enable_section',
-                'type'    => 'checkbox',
-                'options' => array(1 => 'Yes'),
-            ),
-            array(
-                'uid'     => 'hotel_harbour_enable',
-                'label'   => __('Enable Harbour View Room Rate', 'nsru-options'),
-                'section' => 'enable_section',
-                'type'    => 'checkbox',
-                'options' => array(1 => 'Yes'),
-            ),
-            array(
                 'uid'     => 'analytics_code',
                 'label'   => __('Google Analytics Code', 'nsru-options'),
                 'section' => 'tracking_section',
@@ -354,7 +389,6 @@ class NSRU_Options_Plugin {
      * @param array $arguments
      */
     public function section_callback($arguments) {
-
     } // section_callback
 
     /**
@@ -404,7 +438,7 @@ class NSRU_Options_Plugin {
 
 new NSRU_Options_Plugin();
 
-// All the reuqired files used by this plugin.
+// All the required files used by this plugin.
 require_once 'includes/shortcodes.php';
 require_once 'includes/cpt/committee_cpt.php';
 require_once 'includes/cpt/pastchairs_cpt.php';

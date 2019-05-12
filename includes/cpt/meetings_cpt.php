@@ -90,7 +90,7 @@ class NSRU_Meetings {
             'exclude_from_search' => true,
             'publicly_queryable'  => false,
             'show_ui'             => true,
-            'show_in_menu'        => true,
+            'show_in_menu'        => 'nsru-options',
             'menu_position'       => 200,
             'menu_icon'           => 'dashicons-calendar-alt',
             'query_var'           => false,
@@ -333,7 +333,7 @@ class NSRU_Meetings {
         $columns['start_time']   = __('Start Time', 'nsru-options');
         $columns['stop_time']    = __('Stop Time', 'nsru-options');
         $columns['topic']        = __('Topic', 'nsru-options');
-        $columns['speakers']     = __('Speakers', 'nsru-options');
+        $columns['speaker']      = __('Speakers', 'nsru-options');
         $columns['hosted_by']    = __('Hosted By', 'nsru-options');
         $columns['room']         = __('Room', 'nsru-options');
         $columns['date']         = __('Date', 'nsru-options');
@@ -386,7 +386,7 @@ class NSRU_Meetings {
             case 'topic':
                 echo $meta[0]['topic'];
                 break;
-            case 'speakers':
+            case 'speaker':
                 echo $meta[0]['speakers'];
                 break;
             case 'hosted_by':
