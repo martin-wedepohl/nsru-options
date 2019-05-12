@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h2><?php echo __('North Shore Round Up Options', 'nsru-options'); ?></h2>
+    <h2>North Shore Round Up Settings</h2>
     <?php settings_errors(); ?>
     <form method="POST" action="options.php">
         <?php

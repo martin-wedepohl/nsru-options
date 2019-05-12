@@ -130,9 +130,22 @@ jQuery(document).ready(function ($) {
         });
     }
     
+    if(null !== document.querySelector('.how_paypal_works')) {
+        $.ajax({
+            url: 'round_up_dates.php', 
+            data: {action: 'how_paypal_works'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.how_paypal_works').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            }
+        });
+    }
+    
     if(null !== document.querySelector('.price')) {
         $.ajax({
-//            url: 'includes/js/ajax/round_up_dates.php', 
             url: 'round_up_dates.php', 
             data: {action: 'get_ticket_price'}, 
             type: 'POST', 
@@ -167,6 +180,62 @@ jQuery(document).ready(function ($) {
             success: function ($result) {
                 if ($result) {
                     $('.nsru_past_chairs').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            }
+        });
+    }
+    
+    if(null !== document.querySelector('.harbour_room_rate')) {
+        $.ajax({
+            url: 'prices.php', 
+            data: {action: 'get_harbour_room_rate'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.harbour_room_rate').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            }
+        });
+    }
+    
+    if(null !== document.querySelector('.deluxe_room_rate')) {
+        $.ajax({
+            url: 'prices.php', 
+            data: {action: 'get_room_rate'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.deluxe_room_rate').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            }
+        });
+    }
+    
+    if(null !== document.querySelector('.hotel_booking_website')) {
+        $.ajax({
+            url: 'prices.php', 
+            data: {action: 'get_booking_link'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.hotel_booking_website').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            }
+        });
+    }
+    
+    if(null !== document.querySelector('.hotel_booking_code')) {
+        $.ajax({
+            url: 'prices.php', 
+            data: {action: 'get_booking_code'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.hotel_booking_code').html($result);
                     $( document.body ).trigger( 'post-load' );
                 }
             }

@@ -14,6 +14,7 @@
  *    get_surcharge      - Get the online ticket surcharge
  *    get_paypal         - Display the PayPal section
  *    get_ticket_price   - Display the ticket prices
+ *    how_paypal_works   - Display How PayPal works button
  *
  * @package   NSRU_Options
  * @author    Original Author <martin.wedepohl@shaw.ca>
@@ -49,6 +50,9 @@ switch ($action) {
         break;
     case 'get_ticket_price':
         nsru_price();
+        break;
+    case 'how_paypal_works':
+        nsru_how_paypal_works();
         break;
 }
 
@@ -304,7 +308,7 @@ function nsru_paypal() {
 
     if(0 === $enable_paypal) {
         echo '<p class="paypal_closed">PayPal purchase is now closed. Please pick up your tickets at the event.</p>';
-        die('');
+        die();
     }
 
     date_default_timezone_set( get_option('timezone_string') );
@@ -369,17 +373,43 @@ function nsru_price() {
     $now_ts = time();
 
     $price  = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price', $round_up_options ) ? $round_up_options['ticket_price'] : '' ) : '';
-    $retstr = '<p class="round-up-price">The cost to attend the North Shore Round Up will be $' . $price . '.';
+    $retstr = 'The cost to attend the North Shore Round Up will be $' . $price . '.';
     if ( $now_ts < $end_date_ts ) {
         // Discounted prices are in effect
         $end_date = date('F j, Y', $end_date_ts);
         $price    = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price_discount', $round_up_options ) ? $round_up_options['ticket_price_discount'] : '' ) : '';
         $retstr  .= "<br /><strong>NOTE:</strong> Tickets are on sale for the discounted price of $$price if you purchase them <strong>before</strong> $end_date.";
     }
-    $retstr .= '</p>';
 
     echo $retstr;
 
     die();
 
 } // nsru_surcharge()
+
+/**
+ * Get the How PayPal Works Button.
+ *
+ * This will only be displayed if PayPal is enabled.
+ *
+ * @return string
+ */
+function nsru_how_paypal_works() {
+
+    $round_up_options = get_option( 'round_up_options' );
+
+    $enable_paypal = is_array( $round_up_options ) ? ( array_key_exists( 'paypal_enable', $round_up_options ) ? intval($round_up_options['paypal_enable']) : 0 ) : 0;
+
+    if(0 === $enable_paypal) {
+        echo '';
+    } else {
+        $retval  = '<a title="How PayPal Works" href="https://www.paypal.com/webapps/mpp/paypal-popup">';
+        $retval .= '<img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_74x46.jpg" alt="PayPal Logo" border="0" />';
+        $retval .= '</a>';
+
+        echo $retval;
+    }
+    
+    die();
+
+} // nsru_how_paypal_works

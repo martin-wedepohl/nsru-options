@@ -133,32 +133,6 @@ function nsru_get_paypal_shortcode() {
 add_shortcode( 'nsru_get_paypal', 'nsru_get_paypal_shortcode' );
 
 /**
- * Get the How PayPal Works Button.
- *
- * This will only be displayed if PayPal is enabled.
- *
- * @return string
- */
-function nsru_get_how_paypal_works_shortcode() {
-
-    $round_up_options = get_option( 'round_up_options' );
-
-    $enable_paypal = is_array( $round_up_options ) ? ( array_key_exists( 'paypal_enable', $round_up_options ) ? intval($round_up_options['paypal_enable']) : 0 ) : 0;
-
-    if(0 === $enable_paypal) {
-        return '';
-    }
-
-    $retval  = '<a title="How PayPal Works" href="https://www.paypal.com/webapps/mpp/paypal-popup">';
-    $retval .= '<img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_74x46.jpg" alt="PayPal Logo" border="0" />';
-    $retval .= '</a>';
-
-    return $retval;
-
-} // nsru_get_how_paypal_works_shortcode
-add_shortcode( 'nsru_get_how_paypal_works', 'nsru_get_how_paypal_works_shortcode' );
-
-/**
  * Get North Shore Round Up Past Chairs.
  *
  * @return string
@@ -195,12 +169,15 @@ function nsru_meetings_shortcode() {
 add_shortcode( 'nsru_meetings', 'nsru_meetings_shortcode' );
 
 /**
- *
- * @param type $atts
+ * Returns a span that AJAX can populate with the North Shore Round Up room rates.
+ * 
+ * The span will be for either the Deluxe Room or the Deluxe Room with Harbour View
+ * 
+ * @param array $atts - Array of attributes for the shortcode. Default type => 'normal'. Accepts 'normal', 'harbour'.
+ * 
  * @return string
  */
 function nsru_get_hotel_price_shortcode( $atts ) {
-    $round_up_options = get_option( 'round_up_options' );
 
     $a = shortcode_atts( array(
         'type' => 'normal',
@@ -208,25 +185,9 @@ function nsru_get_hotel_price_shortcode( $atts ) {
 
     $hotel_price = '';
     if( 'harbour' === $a['type'] ) {
-        $price = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_harbour_special_price', $round_up_options ) ? $round_up_options['hotel_harbour_special_price'] : '' ) : '';
-        $hotel_harbour_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_harbour_enable', $round_up_options ) ? intval($round_up_options['hotel_harbour_enable']) : 0 ) : 0;
-        if('' !== $price) {
-            if(1 === $hotel_harbour_enable) {
-                $hotel_price = '<span class="harbour-rooms">Deluxe Room with Harbour View for the special rate of $' . $price . '</span>';
-            } else {
-                $hotel_price = '<span class="harbour-rooms-sold-out">Deluxe Rooms with Harbour View are fully sold out!</span>';
-            }
-        }
+        $hotel_price = '<span class="harbour_room_rate"></span>';
     } else {
-        $price = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_special_price', $round_up_options ) ? $round_up_options['hotel_special_price'] : '' ) : '';
-        $hotel_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_enable', $round_up_options ) ? intval($round_up_options['hotel_enable']) : 0 ) : 0;
-        if('' !== $price) {
-            if(1 === $hotel_enable) {
-                $hotel_price = '<span class="delux-room-rate">Deluxe Room for the special rate of $' . $price . '</span>';
-            } else {
-                $hotel_price = '<span class="delux-rooms-sold-out">Deluxe Rooms are fully sold out</span>';
-            }
-        }
+        $hotel_price = '<span class="deluxe_room_rate"></span>';
     }
 
     return $hotel_price;
@@ -239,19 +200,8 @@ add_shortcode( 'nsru_get_hotel_price', 'nsru_get_hotel_price_shortcode' );
  * @return string
  */
 function nsru_get_hotel_booking_link_shortcode() {
-    $round_up_options = get_option( 'round_up_options' );
-
-    $hotel_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_enable', $round_up_options ) ? intval($round_up_options['hotel_enable']) : 0 ) : 0;
-    $hotel_harbour_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_harbour_enable', $round_up_options ) ? intval($round_up_options['hotel_harbour_enable']) : 0 ) : 0;
-
-    if(1 === $hotel_enable || 1 === $hotel_harbour_enable) {
-        $website = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_booking_website', $round_up_options ) ? $round_up_options['hotel_booking_website'] : '' ) : '';
-        $link = '<span class="hotel-booking-website">Book on-line by clicking the <a href="' . $website . '" target="_blank" title="Click Hotel Booking Link">Hotel Booking Link</a>.</span>';
-    } else {
-        $link = '<span class="hotel-booking-website-over">On-line hotel bookings are now closed.</span>';
-    }
-
-    return $link;
+    
+    return '<span class="hotel_booking_website"></span>';
 
 } // nsru_get_hotel_booking_link_shortcode
 add_shortcode( 'nsru_get_hotel_booking_link', 'nsru_get_hotel_booking_link_shortcode' );
@@ -261,19 +211,123 @@ add_shortcode( 'nsru_get_hotel_booking_link', 'nsru_get_hotel_booking_link_short
  * @return string
  */
 function nsru_get_hotel_booking_code_shortcode() {
-    $round_up_options = get_option( 'round_up_options' );
 
-    $hotel_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_enable', $round_up_options ) ? intval($round_up_options['hotel_enable']) : 0 ) : 0;
-    $hotel_harbour_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_harbour_enable', $round_up_options ) ? intval($round_up_options['hotel_harbour_enable']) : 0 ) : 0;
-
-    if(1 === $hotel_enable || 1 === $hotel_harbour_enable) {
-        $link = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_booking_code', $round_up_options ) ? $round_up_options['hotel_booking_code'] : '' ) : '';
-        $link = '<span class="hotel-booking-code">Book by phone by calling the hotel and quoting the Reservation ID: ' . $link . ' to the Reservation Agent.</span>';
-    } else {
-        $link = '<span class="hotel-booking-code-over">Sadly all special rate hotel rooms are now sold out.</span>';
-    }
-
-    return $link;
+    return '<span class="hotel_booking_code"></span>';
 
 } // nsru_get_hotel_booking_code_shortcode
 add_shortcode( 'nsru_get_hotel_booking_code', 'nsru_get_hotel_booking_code_shortcode' );
+
+/**
+ * Get the How PayPal Works Button.
+ *
+ * This will only be displayed if PayPal is enabled.
+ *
+ * @return string
+ */
+function nsru_get_how_paypal_works_shortcode() {
+
+    return '<span class="how_paypal_works"></span>';
+
+} // nsru_get_how_paypal_works_shortcode
+add_shortcode( 'nsru_get_how_paypal_works', 'nsru_get_how_paypal_works_shortcode' );
+
+/**
+ * Shortcodes below this point are actual shortcodes rather than just returning a span that AJAX
+ * can modify.
+ * 
+ * These shortcodes are for static or rarely changing values that can be cached.
+ */
+
+function nsru_get_hotel_information_shortcode( $atts, $content = null ) {
+
+    $round_up_options = get_option( 'round_up_options' );
+    
+    $a = shortcode_atts( array(
+        'type' => 'name',
+        'link' => true,
+    ), $atts, 'nsru_get_hotel_information' );
+    
+    switch( $a['type'] ) {
+        case 'local':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_local_phone', $round_up_options ) ? $round_up_options['hotel_local_phone'] : '' ) : '';
+            if(true === $a['link']) {
+                $link = preg_replace('/[-+. ]/', '', $data);                // Remove -, +, . and space from phone number
+                $data = '<a href="tel:' . $link . '">' . $data . '</a>';
+            }
+            break;
+        case 'tollfree_can':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_canadian_toll_free', $round_up_options ) ? $round_up_options['hotel_canadian_toll_free'] : '' ) : '';
+            if(true === $a['link']) {
+                $link = preg_replace('/[-+. ]/', '', $data);                // Remove -, +, . and space from phone number
+                $data = '<a href="tel:' . $link . '">' . $data . '</a>';
+            }
+            break;
+        case 'tollfree_us':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_us_toll_free', $round_up_options ) ? $round_up_options['hotel_us_toll_free'] : '' ) : '';
+            if(true === $a['link']) {
+                $link = preg_replace('/[-+. ]/', '', $data);                // Remove -, +, . and space from phone number
+                $data = '<a href="tel:' . $link . '">' . $data . '</a>';
+            }
+            break;
+        case 'fax':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_fax', $round_up_options ) ? $round_up_options['hotel_fax'] : '' ) : '';
+            if(true === $a['link']) {
+                $link = preg_replace('/[-+. ]/', '', $data);                // Remove -, +, . and space from phone number
+                $data = '<a href="tel:' . $link . '">' . $data . '</a>';
+            }
+            break;
+        case 'email':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_email', $round_up_options ) ? $round_up_options['hotel_email'] : '' ) : '';
+            if(true === $a['link']) {
+                $data = '<a href="mailto:' . $data . '">' . $data . '</a>';
+            }
+            break;
+        case 'website':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_website', $round_up_options ) ? $round_up_options['hotel_website'] : '' ) : '';
+            if(true === $a['link']) {
+                $name = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_name', $round_up_options ) ? $round_up_options['hotel_name'] : '' ) : '';
+                $data = '<a href="' . $data . '" target="_blank" rel="noopener">' . $name . '</a>';
+            }
+            break;
+        case 'address':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_address', $round_up_options ) ? $round_up_options['hotel_address'] : '' ) : '';
+            break;
+        default:
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_name', $round_up_options ) ? $round_up_options['hotel_name'] : '' ) : '';
+            break;
+    }
+    
+    return $content . ' ' . $data;
+    
+}
+add_shortcode( 'nsru_get_hotel_information', 'nsru_get_hotel_information_shortcode' );
+
+function nsru_get_location_information_shortcode( $atts, $content = null ) {
+
+    $round_up_options = get_option( 'round_up_options' );
+    
+    $a = shortcode_atts( array(
+        'type' => 'name',
+        'link' => true,
+    ), $atts, 'nsru_get_location_information' );
+    
+    switch( $a['type'] ) {
+        case 'website':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'location_website', $round_up_options ) ? $round_up_options['location_website'] : '' ) : '';
+            if(true === $a['link']) {
+                $name = is_array( $round_up_options ) ? ( array_key_exists( 'location_name', $round_up_options ) ? $round_up_options['location_name'] : '' ) : '';
+                $data = '<a href="' . $data . '" target="_blank" rel="noopener">' . $name . '</a>';
+            }
+            break;
+        case 'address':
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'location_address', $round_up_options ) ? $round_up_options['location_address'] : '' ) : '';
+            break;
+        default:
+            $data = is_array( $round_up_options ) ? ( array_key_exists( 'location_name', $round_up_options ) ? $round_up_options['location_name'] : '' ) : '';
+            break;
+    }
+    
+    return $content . ' ' . $data;
+    
+}
+add_shortcode( 'nsru_get_location_information', 'nsru_get_location_information_shortcode' );
