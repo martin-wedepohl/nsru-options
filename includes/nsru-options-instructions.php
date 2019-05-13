@@ -60,7 +60,7 @@
         <h4>Menus</h4>
         <p>On the Dashboard Menu do the following:</p>
         <ul class="wantdisc">
-            <li>Apperance</li>
+            <li>Appearance</li>
             <li>Customize</li>
             <li>Menus</li>
             <li>Main Menu</li>
@@ -75,7 +75,7 @@
         <h4>Headers</h4>
         <p>On the Dashboard Menu do the following:</p>
         <ul class="wantdisc">
-            <li>Apperance</li>
+            <li>Appearance</li>
             <li>Customize</li>
             <li>Header</li>
             <li>Styling</li>
@@ -94,7 +94,7 @@
         <h4>Footers</h4>
         <p>On the Dashboard Menu do the following:</p>
         <ul class="wantdisc">
-            <li>Apperance</li>
+            <li>Appearance</li>
             <li>Customize</li>
             <li>Footer</li>
             <li>Styling</li>
@@ -112,7 +112,7 @@
         <h4>Custom CSS</h4>
         <p>On the Dashboard Menu do the following:</p>
         <ul class="wantdisc">
-            <li>Apperance</li>
+            <li>Appearance</li>
             <li>Customize</li>
             <li>Additional CSS</li>
         </ul>
@@ -517,6 +517,8 @@
     
     <div id="Pages" class="tabcontent">
         <p><strong>ALL</strong> pages <strong>MUST</strong> be edited using Elementor</p>
+
+        <hr />
         <h3>Home</h3>
         <p>The main page for the Round Up which is composed of 4 sections</p>
         <ol>
@@ -525,6 +527,8 @@
             <li>Section - Containing a column with a Title for the Speakers and a shortcode to display the speakers</li>
             <li>Section - Containing a column with an Image of this years Round Up poster</li>
         </ol>
+
+        <hr />
         <h3>Tickets</h3>
         <p>The tickets page for the Round Up which is composed of 5 sections</p>
         <ol>
@@ -534,32 +538,44 @@
             <li>Section - Containing a column with text about where to pick up on-line tickets</li>
             <li>Section - Containing two columns with shortcodes to display paypal and how paypal works</li>
         </ol>
+
+        <hr />
         <h3>Schedule</h3>
         <p>The schedule page displays all the Round Up Meetings and is composed of 2 sections</p>
         <ol>
             <li>Section - Containing a column with Heading</li>
             <li>Section - Containing a columns with a shortcodes to display the list of meeting</li>
         </ol>
+
+        <hr />
         <h3>Hotel</h3>
         <p>The hotel page displays all the Hotel information and is composed of 2 sections</p>
         <ol>
             <li>Section - Containing a column with Heading</li>
             <li>Section - Containing a columns with text and shortcodes to display the hotel information</li>
         </ol>
+
+        <hr />
         <h3>FAQ</h3>
         <p>The FAQ page is composed of 14 sections that contain all the information in the FAQ</p>
+
+        <hr />
         <h3>- Links</h3>
         <p>The links page displays all the useful links and is composed of 2 sections</p>
         <ol>
             <li>Section - Containing a column with Heading</li>
             <li>Section - Containing a columns with text and shortcodes to display the useful links</li>
         </ol>
+
+        <hr />
         <h3>- Committee</h3>
         <p>The committee page displays current committee members and is composed of 2 sections</p>
         <ol>
             <li>Section - Containing a column with Heading</li>
             <li>Section - Containing a columns with a shortcodes to display the current committee</li>
         </ol>
+
+        <hr />
         <h3>- History</h3>
         <p>The history page displays the history of the Round Up and the past chairs of the Round Up and is composed of 8 sections</p>
         <h3>- Past Posters</h3>
@@ -568,8 +584,18 @@
             <li>Section - Containing a column with Heading</li>
             <li>Section - Containing a columns with an image gallery to display the old posters</li>
         </ol>
+
+        <hr />
         <h3>Contact</h3>
+        <p>This page contains the contact page</p>
+        <ol>
+            <li>Section - Containing a column with Heading</li>
+            <li>Section - Containing 2 columns with a Contact form and a MailChimp subscription form</li>
+        </ol>
+
+        <hr />
         <h3>Privacy Policy</h3>
+        <p>This page contains the Privacy Policy</p>
     </div><!-- #Pages -->
     
     
