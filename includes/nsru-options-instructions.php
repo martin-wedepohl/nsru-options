@@ -135,6 +135,15 @@
         <pre>
             #b538a0
         </pre>
+        <ul class="wantdisc">
+            <li>Click the Elementor menu (3 bars on left side of Elementor box</li>
+            <li>Click Color Picker</li>
+            <li>Click A Color not used in the theme</li>
+        </ul>
+        <p>Change to:</p>
+        <pre>
+            #b538a0
+        </pre>
         <p>Where #b538a0 is the RGB value for the color desired</p>
         
     </div><!-- #Settings -->
