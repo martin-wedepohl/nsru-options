@@ -216,7 +216,7 @@ function nsru_get_annual() {
  *    starts in X days.
  *    starts TODAY!
  *    is on NOW!
- *    is sadly over ... we hope to see you next year.
+ *    is sadly over. Thank you for making the Round Up a wonderful success. We hope to see you at next years Round Up which starts in 328 days.
  */
 function nsru_days_to_round_up() {
 
@@ -236,7 +236,6 @@ function nsru_days_to_round_up() {
     $end_ts   = strtotime($end);
     $now      = time();
 
-    $retval = __('is sadly over ... we hope see you next year.', 'nsru-options');
 
     if ($start_ts > $now) {
         // Hasn't started yet
@@ -245,13 +244,51 @@ function nsru_days_to_round_up() {
         $interval = $start->diff($now);
         $days     = $interval->format('%a');
         if ($days > 0) {
-            $retval = __('starts in', 'nsru-options') . $days . __('days.', 'nsru-options');
+            $retval = __('starts in ', 'nsru-options') . $days . __(' days.', 'nsru-options');
         } else {
             $retval = __('starts TODAY!', 'nsru-options');
         }
     } elseif ($end_ts > $now) {
         // Started, but not ended
         $retval = __('is on NOW!', 'nsru-options');
+    } else {
+        $retval  = __('is sadly over.', 'nsru-options') . '<br />';
+        $retval .= __('Thank you for making the Round Up a wonderful success.', 'nsru-options') . '<br />';
+        
+        /*
+         * Calculate the date of the next year's Round Up (Easter Weekend)
+         * This uses the 'Anonymous Gregorian algorithm' for calculating the dates of Easter
+         * Reference: https://en.wikipedia.org/wiki/Computus
+         */
+        $dash_pos = strpos($round_up_start, '-');
+        if(false !== $dash_pos) {
+            $year  = substr($round_up_start, 0, $dash_pos) + 1;
+            $a     = $year % 19;
+            $b     = intval($year / 100);
+            $c     = $year % 100;
+            $d     = intval($b / 4);
+            $e     = $b % 4;
+            $f     = intval(($b + 8) / 25);
+            $g     = intval(($b - $f + 1) / 3);
+            $h     = (19 * $a + $b - $d - $g + 15) % 30;
+            $i     = intval($c / 4);
+            $k     = $c % 4;
+            $l     = (32 + 2 * $e +2 * $i - $h - $k) % 7;
+            $m     = intval(($a + 11 * $h + 22 * $l) / 451);
+            $month = intval(($h + $l - 7 * $m + 114) / 31);
+            $day   = (($h + $l - 7 * $m + 114) % 31) + 1;
+            if($month < 10) {
+                $month = '0' . $month;
+            }
+            if($day < 10) {
+                $day = '0' . $day;
+            }
+            $start    = new DateTime($year . '-' . $month . '-' . $day . ' 00:00:00');
+            $now      = new DateTime(date('Y-m-d 00:00:00'));
+            $interval = $start->diff($now);
+            $days     = $interval->format('%a') - 2;
+            $retval .= __('We hope to see you at next years Round Up which starts in ', 'nsru-options') . $days . __(' days.', 'nsru-options');
+        }
     }
 
     echo $retval;

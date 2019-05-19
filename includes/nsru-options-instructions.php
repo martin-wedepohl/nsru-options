@@ -316,11 +316,11 @@
             <li>starts in X days</li>
             <li>starts TODAY!</li>
             <li>is on NOW!</li>
-            <li>is sadly over ... we hope to see you next year.</li>
+            <li>is sadly over.<br />Thank you for making the Round Up a wonderful success.<br />We hope to see you at next years Round Up which starts in XXX days.</li>
         </ul>
         <p>Attributes: - NOT USED</p>
         <p>Content: - NOT USED</p>
-        <p>eg: [nsru_get_days_to] - Will return 'is sadly over ... we hope to see you next year.'</p>
+        <p>eg: [nsru_get_days_to] - Will return 'is on NOW!'</p>
         
         <hr />
         <p><strong>nsru_get_hotel_booking_code</strong> - Return the hotel telephone booking code or 
