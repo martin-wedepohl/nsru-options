@@ -107,17 +107,19 @@ class NSRU_Options_Plugin {
 
         $search_item = __('Settings', 'nsru-options');
 
-        foreach ($submenu['nsru-options'] as $index => $item) {
-            if ($search_item === $item[0]) {
-                $custom = $item;
-                unset($submenu['nsru-options'][$index]);
-                break;
+        if(!empty($submenu)) {
+            foreach ($submenu['nsru-options'] as $index => $item) {
+                if ($search_item === $item[0]) {
+                    $custom = $item;
+                    unset($submenu['nsru-options'][$index]);
+                    break;
+                }
             }
-        }
 
-        if (null !== $custom) {
-            // Push to beginning of array
-            array_unshift($submenu['nsru-options'], $custom);
+            if (null !== $custom) {
+                // Push to beginning of array
+                array_unshift($submenu['nsru-options'], $custom);
+            }
         }
 
         return $menu_order;
