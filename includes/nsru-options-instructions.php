@@ -28,9 +28,12 @@
         </ul>
         <h3>Plugins</h3>
         <ul class="wantdisc">
-            <li>Elementor - Drag and Drop page builder <strong>(REQUIRED)</strong></li>
-            <li>NSRU Options - Options customized for NSRU Theme <strong>(REQUIRED)</strong></li>
             <li>Autoptimize - Optimizes CSS, JS, Fonts to increase site speed (Recommended)</li>
+            <li>Contact Form 7 - Create Contact Forms (Recommended)</li>
+            <li>Contact Form 7 MailChimp Extension - Integrate Contact Form 7 with MailChimp (Recommended)</li>
+            <li>Duplicator - Backup/Migrate (Recommended)</li>
+            <li>Elementor - Drag and Drop page builder <strong>(REQUIRED)</strong></li>
+            <li>NSRU Options Plugin - Options customized for NSRU Theme <strong>(REQUIRED)</strong></li>
             <li>Post Types Order - Drag and Drop reordering of posts (Recommended)</li>
             <li>Simple Page Ordering - Drag and Drop page reordering for correct top level menu order (Recommended)</li>
             <li>Smush - Image compression (Recommended)</li>
@@ -119,6 +122,19 @@
         <p>Add the following:</p>
         <pre>
             a { color: #b538a0; }
+            #breadcrumbs {
+                text-align: right;
+                padding-right: 33px;
+                padding-bottom: 10px;
+                background-color: #b538a0;
+                color: white;
+            }
+            #breadcrumbs a {
+                color: white;
+            }
+            #breadcrumbs a:hover {
+                color: rgba(255,255,255,.7);
+            }
         </pre>
         <p>Where #b538a0 is the RGB value for the color desired</p>
         
@@ -135,6 +151,7 @@
         <pre>
             #b538a0
         </pre>
+        <p>Where #b538a0 is the RGB value for the color desired</p>
         <ul class="wantdisc">
             <li>Click the Elementor menu (3 bars on left side of Elementor box</li>
             <li>Click Color Picker</li>
