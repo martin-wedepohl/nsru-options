@@ -180,7 +180,6 @@ class NSRU_Meetings {
             'post_type'   => 'nsru_speakers',
             'post_status' => 'publish',
             'numberposts' => -1,
-            'order'       => 'ASC',
         ));
 
         $main_speakers = '<h2>Main Speakers</h2><p>';

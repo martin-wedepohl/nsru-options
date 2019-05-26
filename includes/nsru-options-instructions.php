@@ -29,6 +29,7 @@
         <h3>Plugins</h3>
         <ul class="wantdisc">
             <li>Autoptimize - Optimizes CSS, JS, Fonts to increase site speed (Recommended)</li>
+            <li>Classic Editor - Enable the old style (non-block) editor (Recommended)</li>
             <li>Contact Form 7 - Create Contact Forms (Recommended)</li>
             <li>Contact Form 7 MailChimp Extension - Integrate Contact Form 7 with MailChimp (Recommended)</li>
             <li>Duplicator - Backup/Migrate (Recommended)</li>
@@ -73,7 +74,6 @@
             Create a Menu for all the pages on the main menu
             Menu Location - Click the Right Header Menu
         </pre>
-        <p>Where #b538a0 is the RGB value for the color desired</p>
         
         <h4>Headers</h4>
         <p>On the Dashboard Menu do the following:</p>
