@@ -3,7 +3,7 @@
  * Plugin Name: NSRU Options Plugin
  * Plugin URI:  https://northshoreroundup.com
  * Description: North Shore Round Up Options
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      martin.wedepohl@shaw.ca
  * Author URI:  http://wedepohlengineering.com
  * License:     GPL2
@@ -74,21 +74,20 @@ class NSRU_Options_Plugin {
         // Add the menu item and page
         $page_title = __('North Shore Round Up Settings', 'nsru-options');
         $menu_title = __('NSRU Options', 'nsru-options');
-        $capability = 'manage_options';
         $slug = 'nsru-options';
         $callback = array($this, 'settings_page_content');
         $icon = 'dashicons-admin-generic';
         $position = 100;
-        add_menu_page($page_title, $menu_title, $capability, $slug, $callback, $icon, $position);
+        add_menu_page($page_title, $menu_title, 'edit_others_posts', $slug, $callback, $icon, $position);
 
         $page_title = __('North Shore Round Up Settings', 'nsru-options');
         $menu_title = __('Settings', 'nsru-options');
-        add_submenu_page($slug, $page_title, $menu_title, $capability, $slug, $callback);
+        add_submenu_page($slug, $page_title, $menu_title, 'manage_options', $slug, $callback);
 
         $page_title = __('North Shore Round Up Instructions', 'nsru-options');
         $menu_title = __('Instructions', 'nsru-options');
         $callback = array($this, 'instructions_page_content');
-        add_submenu_page($slug, $page_title, $menu_title, $capability, 'nsru-instructions', $callback);
+        add_submenu_page($slug, $page_title, $menu_title, 'edit_others_posts', 'nsru-instructions', $callback);
     }
 
 // create_options_page
