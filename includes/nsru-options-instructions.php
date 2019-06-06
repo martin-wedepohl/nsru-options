@@ -123,17 +123,23 @@
         <pre>
             a { color: #b538a0; }
             #breadcrumbs {
-                text-align: right;
-                padding-right: 33px;
-                padding-bottom: 10px;
-                background-color: #b538a0;
-                color: white;
+              text-align: right;
+              padding-right: 20px;
+              padding-bottom: 10px;
+              background-color: #b538a0;
+              color: white;
             }
             #breadcrumbs a {
-                color: white;
+              color: white;
             }
             #breadcrumbs a:hover {
-                color: rgba(255,255,255,.7);
+              color: rgba(255,255,255,.7);
+            }
+
+            @media only screen and (min-width: 768px) {
+                #breadcrumbs {
+                  padding-right: 30px;	
+                }
             }
         </pre>
         <p>Where #b538a0 is the RGB value for the color desired</p>

@@ -3,7 +3,7 @@
  * Plugin Name: NSRU Options Plugin
  * Plugin URI:  https://northshoreroundup.com
  * Description: North Shore Round Up Options
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      martin.wedepohl@shaw.ca
  * Author URI:  http://wedepohlengineering.com
  * License:     GPL2
@@ -22,39 +22,57 @@ class NSRU_Options_Plugin {
      */
     public function __construct() {
 
+        // Enqueue all the scripts and styles
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+        // Add a settings link
+        add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( $this, 'plugin_action_link' ) );
+
+        // Required javascript code for the Date Picker.
+        add_action( 'admin_footer', array( $this, 'add_admin_footer_js' ), 10 );
+
+        // Hook into the admin menu.
+        add_action( 'admin_menu', array( $this, 'create_options_page' ) );
+
+        // Custom submenu order
+        add_filter( 'custom_menu_order', array( $this, 'reorder_submenu' ) );
+
+        // Add Settings and Fields.
+        add_action( 'admin_init', array( $this, 'setup_sections' ) );
+        add_action( 'admin_init', array( $this, 'setup_fields' ) );
+
+        // Register the options for the database.
+        register_setting( 'nsru-options', 'round_up_options' );
+
+        // Add Google Analytics to head
+        add_action( 'wp_head', array( $this, 'add_analytics_in_header' ), 100 );
+        
+    } // __construct
+    
+    /**
+     * Enqueue all the required styles and scripts for the admin side
+     */
+    public function enqueue_admin_scripts() {
+        
         wp_enqueue_style('nsru-options-css', plugin_dir_url(__FILE__) . 'dist/css/style.min.css');
         wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
-        wp_enqueue_script('nsru-options-js', plugin_dir_url(__FILE__) . 'dist/js/script.min.js', array('jquery'), '', true);
 
         // Required enqeue scripts for the Date Picker.
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-datepicker');
+        
+    } // enqueue_admin_scripts
 
-        // Add a settings link
-        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_link'));
-
-        // Required javascript code for the Date Picker.
-        add_action('admin_footer', array($this, 'add_admin_footer_js'), 10);
-
-        // Hook into the admin menu.
-        add_action('admin_menu', array($this, 'create_options_page'));
-
-        // Custom submenu order
-        add_filter('custom_menu_order', array($this, 'reorder_submenu'));
-
-        // Add Settings and Fields.
-        add_action('admin_init', array($this, 'setup_sections'));
-        add_action('admin_init', array($this, 'setup_fields'));
-
-        // Register the options for the database.
-        register_setting('nsru-options', 'round_up_options');
-
-        // Add Google Analytics to head
-        add_action('wp_head', array($this, 'add_analytics_in_header'), 100);
-    }
-
-// __construct
+    /**
+     * Enqueue all the required styles and scripts for the client side
+     */
+    public function enqueue_scripts() {
+        
+        wp_enqueue_script('nsru-options-js', plugin_dir_url(__FILE__) . 'dist/js/script.min.js', array('jquery'), '', true);
+        
+    } // enqueue_scripts
 
     public function plugin_action_link($links) {
 
@@ -62,9 +80,8 @@ class NSRU_Options_Plugin {
         $links[] = '<a href="' . admin_url('admin.php?page=nsru-instructions') . '">' . __('Instructions', 'nsru-options') . '</a>';
 
         return $links;
-    }
-
-// plugin_action_link
+        
+    } // plugin_action_link
 
     /**
      * Create and add the plugin options page.
@@ -88,9 +105,8 @@ class NSRU_Options_Plugin {
         $menu_title = __('Instructions', 'nsru-options');
         $callback = array($this, 'instructions_page_content');
         add_submenu_page($slug, $page_title, $menu_title, 'edit_others_posts', 'nsru-instructions', $callback);
-    }
-
-// create_options_page
+        
+    } // create_options_page
 
     /**
      * Reorder the submenu so that the NSRU Options is the first item in the submenu
@@ -100,6 +116,7 @@ class NSRU_Options_Plugin {
      * @param type $menu_order
      */
     public function reorder_submenu($menu_order) {
+        
         global $submenu;
 
         $custom = null;
@@ -122,9 +139,8 @@ class NSRU_Options_Plugin {
         }
 
         return $menu_order;
-    }
-
-// reorder_submenu
+        
+    } // reorder_submenu
 
     /**
      * Add the sections used on the options page.
@@ -140,9 +156,7 @@ class NSRU_Options_Plugin {
         add_settings_section('special_rate_section', __('Round Up Special Room Rates', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         add_settings_section('tracking_section', __('Tracking Codes', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         
-    }
-
-// setup_sections
+    } // setup_sections
 
     /**
      * Create the fields and assign them to a specific section.
@@ -408,9 +422,8 @@ class NSRU_Options_Plugin {
         foreach ($fields as $field) {
             add_settings_field($field['uid'], $field['label'], array($this, 'field_callback'), 'nsru-options', $field['section'], $field);
         }
-    }
-
-// setup_fields
+        
+    } // setup_fields
 
     /**
      * Display a specific field.
@@ -423,6 +436,7 @@ class NSRU_Options_Plugin {
      * @param array $arguments Arguments for the field.
      */
     public function field_callback($arguments) {
+        
         $value = '';
         $options = get_option('round_up_options');
         if (is_array($options)) {
@@ -475,9 +489,8 @@ class NSRU_Options_Plugin {
         if ($supplimental = $arguments['supplimental']) {
             printf('<p class="description">%s</p>', $supplimental);
         }
-    }
-
-// field_callback
+        
+    } // field_callback
 
     /**
      * HTML page used to display the options.
@@ -485,9 +498,8 @@ class NSRU_Options_Plugin {
     public function settings_page_content() {
 
         require_once 'includes/nsru-options-settings.php';
-    }
-
-// settings_page_content
+        
+    } // settings_page_content
 
     /**
      * HTML page used to display the instructions.
@@ -495,9 +507,8 @@ class NSRU_Options_Plugin {
     public function instructions_page_content() {
 
         require_once 'includes/nsru-options-instructions.php';
-    }
-
-// settings_page_content
+        
+    } // settings_page_content
 
     /**
      * Callback to display the section.
@@ -508,14 +519,13 @@ class NSRU_Options_Plugin {
      */
     public function section_callback($arguments) {
 
-    }
-
-// section_callback
+    } // section_callback
 
     /**
      * Add the datepicker script to the footer.
      */
     function add_admin_footer_js() {
+        
         ?>
         <script>
             /* <![CDATA[ */
@@ -525,9 +535,8 @@ class NSRU_Options_Plugin {
             /* ]]> */
         </script>
         <?php
-    }
-
-// add_admin_footer_js
+        
+    } // add_admin_footer_js
 
     /**
      * Add the Google Analytics Script into the header
@@ -554,12 +563,10 @@ class NSRU_Options_Plugin {
             <!-- End Google Analytics -->
             <?php
         }
-    }
-
-// add_analytics_in_header
-}
-
-// class NSRU_Options_Plugin
+        
+    } // add_analytics_in_header
+    
+} // class NSRU_Options_Plugin
 
 new NSRU_Options_Plugin();
 
