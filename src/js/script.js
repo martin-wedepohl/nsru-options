@@ -1,5 +1,3 @@
-/* <![CDATA[ */
-
 jQuery(document).ready(function ($) {
     if(null !== document.querySelector('.days_to_round_up')) {
         $.ajax({
@@ -294,4 +292,3 @@ jQuery(document).ready(function ($) {
     }
     
 });
-/* ]]> */

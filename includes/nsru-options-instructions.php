@@ -89,10 +89,9 @@
             Header Width - Full Width
             Sticky Header - Sticky
             Search - DON'T show search
-            Header Styling - Background Color - Set to #b538a0
+            Header Styling - Background Color - Set to #ffffff
             Header Styling - Sticky Breakpoint (px) - Set to 1
         </pre>
-        <p>Where #b538a0 is the RGB value for the color desired</p>
 
         <h4>Footers</h4>
         <p>On the Dashboard Menu do the following:</p>
@@ -111,39 +110,7 @@
             This site is provided by the North Shore Round Up Committee as a service to the community.
             It is not endorsed by Alcoholics Anonymous World Services, does not represent Alcoholics Anonymous as a whole.
         </pre>
-        
-        <h4>Custom CSS</h4>
-        <p>On the Dashboard Menu do the following:</p>
-        <ul class="wantdisc">
-            <li>Appearance</li>
-            <li>Customize</li>
-            <li>Additional CSS</li>
-        </ul>
-        <p>Add the following:</p>
-        <pre>
-            a { color: #b538a0; }
-            #breadcrumbs {
-              text-align: right;
-              padding-right: 20px;
-              padding-bottom: 10px;
-              background-color: #b538a0;
-              color: white;
-            }
-            #breadcrumbs a {
-              color: white;
-            }
-            #breadcrumbs a:hover {
-              color: rgba(255,255,255,.7);
-            }
-
-            @media only screen and (min-width: 768px) {
-                #breadcrumbs {
-                  padding-right: 30px;	
-                }
-            }
-        </pre>
-        <p>Where #b538a0 is the RGB value for the color desired</p>
-        
+                
         <h3>Elementor Colors</h3>
         <p>Elementor needs to be customized to set the primary colors</p>
         <h4>Elementor</h4>
@@ -152,16 +119,6 @@
             <li>Click the Elementor menu (3 bars on left side of Elementor box</li>
             <li>Click Default Colors</li>
             <li>Click Primary</li>
-        </ul>
-        <p>Change to:</p>
-        <pre>
-            #b538a0
-        </pre>
-        <p>Where #b538a0 is the RGB value for the color desired</p>
-        <ul class="wantdisc">
-            <li>Click the Elementor menu (3 bars on left side of Elementor box</li>
-            <li>Click Color Picker</li>
-            <li>Click A Color not used in the theme</li>
         </ul>
         <p>Change to:</p>
         <pre>
@@ -177,6 +134,14 @@
     
         <p>NSRU Options Settings are used to quickly set/enable/disable attributes to do with the Round Up.</p>
         
+        <hr />
+        <h3>NSRU Colors</h3>
+        <p>This section is used for the primary color for the site<br /></p>
+        <ul class="wantdisc">
+            <li>
+                <strong>Main Color:</strong>The HEX value of the main color for the round up including the '#'.
+            </li>
+        </ul>
         <hr />
         <h3>Enable NSRU Options</h3>
         <p>This section is used for quick enabling and disabling of various sections for the Round Up.<br /></p>

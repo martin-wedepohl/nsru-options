@@ -3,7 +3,7 @@
  * Plugin Name: NSRU Options Plugin
  * Plugin URI:  https://northshoreroundup.com
  * Description: North Shore Round Up Options
- * Version:     1.0.4
+ * Version:     1.0.5
  * Author:      martin.wedepohl@shaw.ca
  * Author URI:  http://wedepohlengineering.com
  * License:     GPL2
@@ -47,6 +47,9 @@ class NSRU_Options_Plugin {
 
         // Add Google Analytics to head
         add_action( 'wp_head', array( $this, 'add_analytics_in_header' ), 0 );
+
+        // Add custom CSS to head
+        add_action( 'wp_head', array( $this, 'add_custom_css_in_header' ), 100 );
         
     } // __construct
     
@@ -62,7 +65,7 @@ class NSRU_Options_Plugin {
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-datepicker');
-        
+
     } // enqueue_admin_scripts
 
     /**
@@ -147,6 +150,7 @@ class NSRU_Options_Plugin {
      */
     public function setup_sections() {
 
+        add_settings_section('color_section', __('NSRU Colors', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         add_settings_section('enable_section', __('Enable NSRU Options', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         add_settings_section('dates_section', __('Round Up Dates', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
         add_settings_section('prices_section', __('Round Up Prices', 'nsru-options'), array($this, 'section_callback'), 'nsru-options');
@@ -164,6 +168,14 @@ class NSRU_Options_Plugin {
     public function setup_fields() {
 
         $fields = array(
+            array(
+                'uid' => 'main_color',
+                'label' => __('Main Color', 'nsru-options'),
+                'section' => 'color_section',
+                'type' => 'text',
+                'class' => 'nsru-color-field',
+                'placeholder' => 'Enter Color',
+            ),
             array(
                 'uid' => 'paypal_enable',
                 'label' => __('Enable PayPal Button', 'nsru-options'),
@@ -445,6 +457,22 @@ class NSRU_Options_Plugin {
             }
         }
 
+        if(!isset($arguments['class'])) {
+            $arguments['class'] = '';
+        }
+
+        if(!isset($arguments['placeholder'])) {
+            $arguments['placeholder'] = '';
+        }
+
+        if(!isset($arguments['helper'])) {
+            $arguments['helper'] = false;
+        }
+
+        if(!isset($arguments['supplimental'])) {
+            $arguments['supplimental'] = false;
+        }
+
         switch ($arguments['type']) {
             case 'text':
             case 'password':
@@ -565,6 +593,26 @@ class NSRU_Options_Plugin {
         }
         
     } // add_analytics_in_header
+
+    /**
+     * Add the Custom CSS into the header
+     */
+    function add_custom_css_in_header() {
+
+//        $main_color = '#98d3ba';
+        $round_up_options = get_option('round_up_options');
+        $main_color = $round_up_options['main_color'];
+        ?>
+<style>
+.header-site,.header-site.header-sticky{background-color:<?php echo $main_color;?>;}
+a{color:<?php echo $main_color; ?>;}
+#breadcrumbs{text-align:right;padding-right:20px;padding-bottom:10px;background-color:<?php echo $main_color; ?>;color:white;}
+#breadcrumbs a{color:white;}
+#breadcrumbs a:hover{color:rgba(255,255,255,.7);}
+@media only screen and (min-width:768px){#breadcrumbs{padding-right:30px;}}
+</style>
+        <?php
+    } // add_custom_css_in_header
     
 } // class NSRU_Options_Plugin
 

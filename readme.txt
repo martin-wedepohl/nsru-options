@@ -32,6 +32,10 @@ Answer to foo bar dilemma.
 
 
 == Changelog ==
+= 1.0.5 2019-12-30 =
+* Added easy way to set the primary color
+* Enqueue CSS in header rather than having to enter custom CSS
+
 = 1.0.4 2019-12-29 =
 * Gulp tasks upgraded to latest version
 * All directories have index.php file to stop direct access
