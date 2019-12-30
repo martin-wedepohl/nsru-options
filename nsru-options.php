@@ -3,7 +3,7 @@
  * Plugin Name: NSRU Options Plugin
  * Plugin URI:  https://northshoreroundup.com
  * Description: North Shore Round Up Options
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      martin.wedepohl@shaw.ca
  * Author URI:  http://wedepohlengineering.com
  * License:     GPL2
@@ -46,7 +46,7 @@ class NSRU_Options_Plugin {
         register_setting( 'nsru-options', 'round_up_options' );
 
         // Add Google Analytics to head
-        add_action( 'wp_head', array( $this, 'add_analytics_in_header' ), 100 );
+        add_action( 'wp_head', array( $this, 'add_analytics_in_header' ), 0 );
         
     } // __construct
     
