@@ -1,11 +1,11 @@
-// // Load Gulp...of course
-const { src, dest, task, series, watch, parallel } = require('gulp');
+// Load Gulp...of course
+var gulp = require('gulp');
 
-// // CSS related plugins
+// CSS related plugins
 var sass         = require( 'gulp-sass' );
 var autoprefixer = require( 'gulp-autoprefixer' );
 
-// // JS related plugins
+// JS related plugins
 var uglify       = require( 'gulp-uglify' );
 var babelify     = require( 'babelify' );
 var browserify   = require( 'browserify' );
@@ -13,7 +13,7 @@ var source       = require( 'vinyl-source-stream' );
 var buffer       = require( 'vinyl-buffer' );
 var stripDebug   = require( 'gulp-strip-debug' );
 
-// // Utility plugins
+// Utility plugins
 var rename       = require( 'gulp-rename' );
 var sourcemaps   = require( 'gulp-sourcemaps' );
 var notify       = require( 'gulp-notify' );
@@ -21,62 +21,57 @@ var options      = require( 'gulp-options' );
 var gulpif       = require( 'gulp-if' );
 var image        = require( 'gulp-image' );
 
-// // Browers related plugins
-var browserSync  = require( 'browser-sync' ).create();
-
-// // Project related variables
-var projectURL   = 'https://north-shore-round-up.local/';
+var devDir  = './';
+var baseDir = '../../wp-content/plugins/nsru-options/';
 
 // Style Sheets
-var styleSRC     = 'src/scss/style.scss';
-//var styleForm    = 'src/scss/form.scss';
-//var styleSlider  = 'src/scss/slider.scss';
-//var styleAuth    = 'src/scss/auth.scss';
-var styleURL     = './dist/css/';
-var mapURL       = './';
+var styleSRC     = devDir + 'src/scss/style.scss';
+var styleFiles   = [styleSRC];
+var styleDEST    = baseDir + 'dist/css/';
 
 // Javascript
-var jsSRC        = 'src/js/';
+var jsSRC        = devDir + 'src/js/';
 var jsAdmin      = 'script.js';
-//var jsIndex      = 'index.js';
-//var jsMutation   = 'mutation.js';
-var jsFiles      = [jsAdmin/*, jsIndex, jsMutation*/];
-var jsURL        = './dist/js/';
+var jsFiles      = [jsAdmin];
+var jsDEST       = baseDir + 'dist/js/';
 
 // Images
-//var imageSRC     = 'src/images/*';
-//var imageURL     = './dist/images/';
+//var imageSRC     = devDir + '/src/images/*';
+//var imageURL     = baseDir + 'dist/images/';
+
+// Index files watch
+var srcIndexWatch     = devDir + 'src/index.php';
+var srcJSIndexWatch   = devDir + 'src/js/index.php';
+var distJS            = baseDir + 'dist/js';
+var srcScssIndexWatch = devDir + 'src/scss/index.php';
+var distCSS           = baseDir + 'dist/css'
 
 // Watches
-var styleWatch   = 'src/scss/**/*.scss';
-var jsWatch      = 'src/js/**/*.js';
-var phpWatch     = './**/*.php';
-var htmlWatch    = './**/*.html';
-var htmWatch     = './**/*.htm';
-//var imageWatch   = 'src/images/**/*';
+var styleWatch    = devDir + 'src/scss/**/*.scss';
+var jsWatch       = devDir + 'src/js/**/*.js';
+var includesWatch = devDir + 'includes/**/*.php';
+var distIncludes  = baseDir + 'includes';
+var rootFiles      = ['./LICENSE', './README.md', './gulpfile.js', './package.json','./readme.txt'];
+var rootPhp       = './*.php';
+//var imageWatch   = devDir + 'src/images/**/*';
 
-function css(done) {
-	src([styleSRC/*, styleForm, styleSlider, styleAuth*/])
-		.pipe( sass({
-			errLogToConsole: true,
-			outputStyle: 'expanded'
-		}) )
-//		.pipe( dest( styleURL ) )   // If want to write uncompressed file
-		.pipe( sourcemaps.init() )
-		.pipe( sass({
-			errLogToConsole: true,
-			outputStyle: 'compressed'
-		}) )
-		.on( 'error', console.error.bind( console ) )
-		.pipe( autoprefixer({ browsers: [ 'last 2 versions', '> 5%', 'Firefox ESR' ] }) )
+function style(done) {
+    gulp
+        .src(styleFiles)
+        .pipe(sourcemaps.init())   // Initialize sourcemaps before compilation starts
+        .pipe(sass({
+            errLogToConsole: true,
+            outputStyle: 'compressed'
+        }))
+        .on("error", sass.logError)
+        .pipe( autoprefixer({ overrideBrowserslist: [ 'last 2 versions', '> 5%', 'Firefox ESR', 'not dead' ] }) )        
         .pipe( rename( { suffix: '.min' } ) )
-		.pipe( sourcemaps.write( mapURL ) )
-		.pipe( dest( styleURL ) )
-		.pipe( browserSync.stream() );
-	done();
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(styleDEST));
+    done();
 }
 
-function js(done) {
+function script(done) {
 	jsFiles.map(function (entry) {
 		return browserify({
 			entries: [jsSRC + entry]
@@ -86,15 +81,13 @@ function js(done) {
 		.pipe( source( entry ) )
 		.pipe( buffer() )
 		.pipe( gulpif( options.has( 'production' ), stripDebug() ) )
-//		.pipe( dest( jsURL ) )      // If want to write uncompressed file
 		.pipe( sourcemaps.init({ loadMaps: true }) )
 		.pipe( uglify() )
         .pipe( rename( { suffix: '.min' } ) )
-		.pipe( sourcemaps.write( '.' ) )
-		.pipe( dest( jsURL ) )
-		.pipe( browserSync.stream() );
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( jsDEST ) )
 	});
-	done();
+    done();
 }
 
 //function compress_images( done ) {
@@ -104,38 +97,57 @@ function js(done) {
 //    done();
 //}
 
-function reload(done) {
-	browserSync.reload();
-	done();
-}
-
-function browser_sync(done) {
-	browserSync.init({
-		proxy: projectURL,
-		https: {
-			key: '/Users/Martin/AppData/Roaming/Local by Flywheel/routes/certs/north-shore-round-up.local.key',
-			cert: '/Users/Martin/AppData/Roaming/Local by Flywheel/routes/certs/north-shore-round-up.local.crt'
-		},
-		injectChanges: true,
-		open: false
-	});
+function copyIndex(done) {
+    gulp.src(srcIndexWatch, {allowEmpty: true})
+            .pipe(gulp.dest(baseDir + './dist/'));
     done();
 }
 
-function watch_files() {
-//	watch( imageWatch, reload );
-	watch( phpWatch, reload );
-	watch( htmlWatch, reload );
-	watch( htmWatch, reload );
-	watch( styleWatch, css );
-	watch( jsWatch, series( js, reload ) );
-	src( styleSRC )
-		.pipe( notify({ message: 'Gulp is Watching, Happy Coding!' }) );
-};
+function copyRootFiles(done) {
+    gulp.src(rootFiles, {allowEmpty: true})
+        .pipe(gulp.dest(baseDir));
+    done();
+}
 
-task("css", css);
-task("js", js);
-//task("compress_images", compress_images);
-//task("default", series(css, js, compress_images));
-task("default", series(css, js));
-task("watch", parallel(browser_sync, watch_files));
+function copyRootPhp(done) {
+    gulp.src(rootPhp)
+        .pipe(gulp.dest(baseDir));
+    done();
+}
+
+function copyJSIndex(done) {
+    gulp.src(srcJSIndexWatch, {allowEmpty: true})
+        .pipe(gulp.dest(distJS));
+    done();
+}
+
+function copyCSSIndex(done) {
+    gulp.src(srcScssIndexWatch, {allowEmpty: true})
+        .pipe(gulp.dest(distCSS));
+    done();
+}
+
+function copyInclude(done) {
+    gulp.src(includesWatch, {allowEmpty: true})
+        .pipe(gulp.dest(distIncludes));
+    done();
+}
+
+function watchFiles() {
+    gulp.watch(styleWatch, style);
+    gulp.watch(jsWatch, script);
+    gulp.watch(srcIndexWatch, copyIndex);
+    gulp.watch(rootFiles, copyRootFiles);
+    gulp.watch(rootPhp, copyRootPhp);
+    gulp.watch(srcJSIndexWatch, copyJSIndex);
+    gulp.watch(srcScssIndexWatch, copyCSSIndex);
+    gulp.watch(includesWatch, copyInclude);
+    gulp.src(styleSRC).pipe(notify({message: 'Gulp is Watching, Happy Coding!'}));
+}
+
+var watch = gulp.parallel(style, script, copyIndex, copyRootFiles, copyRootPhp, copyJSIndex, copyCSSIndex, copyInclude, watchFiles);
+
+exports.style = style;
+exports.script = script;
+exports.watch = watch;
+exports.default = watch;

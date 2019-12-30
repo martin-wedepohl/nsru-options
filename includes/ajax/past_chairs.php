@@ -53,7 +53,8 @@ function nsru_past_chairs() {
     }
     $retstr .= '</tr></tbody></table></div><!-- /.pastchairs -->';
 
-    echo $retstr;
+    header('Content-type: application/json');
+    echo json_encode($retstr);
 
     die();
     

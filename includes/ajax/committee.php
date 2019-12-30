@@ -54,7 +54,8 @@ function nsru_committee() {
     }
     $retstr .= '</tr></tbody></table></div><!-- /.committee -->';
 
-    echo $retstr;
+    header('Content-type: application/json');
+    echo json_encode($retstr);
 
     die();
     

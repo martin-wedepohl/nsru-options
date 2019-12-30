@@ -3,7 +3,7 @@ Contributors: martin.wedepohl@shaw.ca
 Requires at least: 4.0
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 1.0.0
+Stable tag: 1.0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,7 +32,26 @@ Answer to foo bar dilemma.
 
 
 == Changelog ==
-= 1.0.0 =
+= 1.0.4 2019-12-29 =
+* Gulp tasks upgraded to latest version
+* All directories have index.php file to stop direct access
+* Ajax call made to /wp-admin/admin-ajax.php
+* header set before return from ajax
+* Return via json_encode for all ajax calls
+
+= 1.0.3 2019-12-29 =
+* Moved Google Analytics to the top of the header section
+
+= 1.0.2 2019-06-05 =
+* Shorcodes not in a class
+* Separated admin and front end script/style enqueing
+* Updated instructions
+
+
+= 1.0.1 2019-05-26 =
+* Editors can view/modify all except NSRU Options Settings
+
+= 1.0.0 2019-04-30 =
 * Initial release
 
 == Upgrade Notice ==

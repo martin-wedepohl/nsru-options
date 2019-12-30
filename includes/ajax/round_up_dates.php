@@ -138,7 +138,8 @@ function nsru_get_date( $type = 'start', $format = 'F j, Y' ) {
  */
 function nsru_get_year_e($type) {
 
-    echo nsru_get_year($type);
+    header('Content-type: application/json');
+    echo json_encode(nsru_get_year($type));
 
     die();
 
@@ -174,7 +175,8 @@ function nsru_get_round_up_dates() {
         $retval = $start_array[2] . ' ' . $start_array[1] . ', ' . $start_array[0] . ' - ' . $end_array[2] . ' ' . $end_array[1] . ', ' . $end_array[0];
     }
 
-    echo $retval;
+    header('Content-type: application/json');
+    echo json_encode($retval);
 
     die();
 
@@ -203,7 +205,8 @@ function nsru_get_annual() {
     }
     $suffix .= ' ';
 
-    echo $number . $suffix . __('Annual', 'nsru-options');
+    header('Content-type: application/json');
+    echo json_encode($number . $suffix . __('Annual', 'nsru-options'));
 
     die();
 
@@ -291,7 +294,8 @@ function nsru_days_to_round_up() {
         }
     }
 
-    echo $retval;
+    header('Content-type: application/json');
+    echo json_encode($retval);
 
     die();
 
@@ -326,7 +330,8 @@ function nsru_surcharge() {
         $retval = is_array( $round_up_options ) ? ( array_key_exists( 'online_surcharge_discount', $round_up_options ) ? number_format((float)$round_up_options['online_surcharge_discount'], 2, '.', '') : '' ) : '';
     }
 
-    echo $retval;
+    header('Content-type: application/json');
+    echo json_encode($retval);
 
     die();
 
@@ -384,7 +389,8 @@ function nsru_paypal() {
         $retval .= '</form>';
     }
 
-    echo $retval;
+    header('Content-type: application/json');
+    echo json_encode($retval);
 
     die();
 
@@ -418,7 +424,8 @@ function nsru_price() {
         $retstr  .= "<br /><strong>NOTE:</strong> Tickets are on sale for the discounted price of $$price if you purchase them <strong>before</strong> $end_date.";
     }
 
-    echo $retstr;
+    header('Content-type: application/json');
+    echo json_encode($retstr);
 
     die();
 
@@ -438,13 +445,15 @@ function nsru_how_paypal_works() {
     $enable_paypal = is_array( $round_up_options ) ? ( array_key_exists( 'paypal_enable', $round_up_options ) ? intval($round_up_options['paypal_enable']) : 0 ) : 0;
 
     if(0 === $enable_paypal) {
-        echo '';
+        header('Content-type: application/json');
+        echo json_encode('');
     } else {
         $retval  = '<a title="How PayPal Works" href="https://www.paypal.com/webapps/mpp/paypal-popup">';
         $retval .= '<img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_74x46.jpg" alt="PayPal Logo" border="0" />';
         $retval .= '</a>';
 
-        echo $retval;
+        header('Content-type: application/json');
+        echo json_encode($retval);
     }
     
     die();

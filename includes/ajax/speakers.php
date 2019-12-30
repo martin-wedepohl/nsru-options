@@ -57,7 +57,8 @@ function nsru_speakers() {
         }
     }
 
-    echo $retstr;
+    header('Content-type: application/json');
+    echo json_encode($retstr);
 
     die();
     

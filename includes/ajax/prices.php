@@ -61,7 +61,8 @@ function nsru_room_rates( $type ) {
         }
     }
 
-    echo $hotel_price;
+    header('Content-type: application/json');
+    echo json_encode($hotel_price);
     
     die();
 
@@ -80,7 +81,8 @@ function nsru_booking_link() {
         $link = '<span class="hotel-booking-website-over">On-line hotel bookings are now closed.</span>';
     }
 
-    echo $link;
+    header('Content-type: application/json');
+    echo json_encode($link);
     
     die();
 
@@ -99,7 +101,8 @@ function nsru_booking_code() {
         $link = '<span class="hotel-booking-code-over">Sadly all special rate hotel rooms are now sold out.</span>';
     }
 
-    echo $link;
+    header('Content-type: application/json');
+    echo json_encode($link);
     
     die();
 

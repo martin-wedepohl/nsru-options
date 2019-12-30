@@ -136,7 +136,8 @@ function nsru_meetings() {
         $retstr .= '</tbody></table>';
     }
 
-    echo $retstr;
+    header('Content-type: application/json');
+    echo json_encode($retstr);
 
     die();
 
