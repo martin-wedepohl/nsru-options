@@ -187,7 +187,22 @@ function nsru_get_round_up_dates() {
  */
 function nsru_get_annual() {
 
+    $meta_keys     = NSRU_PastChairs::GetMetaKey();
+    $posts = get_posts(
+        array(
+            'post_type'   => 'nsru_pastchairs',
+            'post_status' => 'publish',
+            'numberposts' => -1,
+            'order'       => 'ASC',
+        )
+    );
+    $num_cancelled = 0;
+    foreach($posts as $post) {
+        $num_cancelled += 'on' === get_post_meta( $post->ID, $meta_keys['cancelled'], true) ? 1 : 0;
+    }
+
     $number = nsru_get_year('current') - nsru_get_year('first') + 1;
+    $number -= $num_cancelled;
 
     switch ($number % 10) {
         case 1:

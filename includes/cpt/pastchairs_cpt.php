@@ -16,9 +16,10 @@ defined('ABSPATH') or die('');
  */
 class NSRU_PastChairs {
 
-    private static $META_DATA_KEY  = '_meta_pastchairs_data';
-    private static $META_BOX_DATA  = 'nsru_pastchairs_save_meta_box_data';
-    private static $META_BOX_NONCE = 'nsru_pastchairs_meta_box_nonce';
+    private static $META_DATA_KEY        = '_meta_pastchairs_data';
+    private static $META_CANCEL_DATA_KEY = '_meta_cancelled_data';
+    private static $META_BOX_DATA        = 'nsru_pastchairs_save_meta_box_data';
+    private static $META_BOX_NONCE       = 'nsru_pastchairs_meta_box_nonce';
 
     /**
      * Constructor for the class.
@@ -38,11 +39,11 @@ class NSRU_PastChairs {
     /**
      * Returns the meta data key for the custom post type.
      *
-     * @return string
+     * @return array
      */
     public static function GetMetaKey() {
 
-        return NSRU_PastChairs::$META_DATA_KEY;
+        return ['year' => NSRU_PastChairs::$META_DATA_KEY, 'cancelled' => NSRU_PastChairs::$META_CANCEL_DATA_KEY];
 
     } // GetMetaKey
 
@@ -128,8 +129,8 @@ class NSRU_PastChairs {
         $first_year       = is_array( $round_up_options ) ? ( array_key_exists( 'first_year', $round_up_options ) ? $round_up_options['first_year'] : 0 ) : 0;
 
         // Get meta data
-        $meta = get_post_meta($post->ID, NSRU_PastChairs::$META_DATA_KEY, false);
-        $year = $meta[0];
+        $year      = get_post_meta($post->ID, NSRU_PastChairs::$META_DATA_KEY, true);
+        $cancelled = get_post_meta($post->ID, NSRU_PastChairs::$META_CANCEL_DATA_KEY, true);
 
         ?>
         <table class="form-table">
@@ -137,6 +138,12 @@ class NSRU_PastChairs {
                 <th scope="row"><?php echo __('Year:', 'nsru-options'); ?></th>
                 <td>
                     <input type="number" id="year" name="year" class="regular-text" min="<?php echo $first_year; ?>" max="2200" step="1" value="<?php echo esc_attr($year); ?>" />
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?php echo __('Cancelled?', 'nsru-options'); ?></th>
+                <td>
+                    <input type="checkbox" id="cancelled" name="cancelled" class="regular-text" <?php checked($cancelled, 'on'); ?> />
                 </td>
             </tr>
         </table>
@@ -177,8 +184,10 @@ class NSRU_PastChairs {
         }
 
         $my_data = sanitize_text_field($_POST['year']);
-
         update_post_meta($post_id, NSRU_PastChairs::$META_DATA_KEY, $my_data);
+
+        $my_data = sanitize_text_field($_POST['cancelled']);
+        update_post_meta($post_id, NSRU_PastChairs::$META_CANCEL_DATA_KEY, $my_data);
 
     } // save_meta_box_data
 
@@ -194,8 +203,9 @@ class NSRU_PastChairs {
         // Moving published date to the end of the list.
         unset($columns['date']);
 
-        $columns['year'] = __('Year', 'nsru-options');
-        $columns['date'] = __('Date', 'nsru-options');
+        $columns['year']      = __('Year', 'nsru-options');
+        $columns['cancelled'] = __('Cancelled', 'nsru-options');
+        $columns['date']      = __('Date', 'nsru-options');
 
         return $columns;
 
@@ -209,12 +219,16 @@ class NSRU_PastChairs {
      */
     public function custom_column($column, $post_id) {
 
-        $meta = get_post_meta($post_id, NSRU_PastChairs::$META_DATA_KEY, false);
-        $year = $meta[0];
+        $year      = get_post_meta($post_id, NSRU_PastChairs::$META_DATA_KEY, true);
+        $cancelled = get_post_meta($post_id, NSRU_PastChairs::$META_CANCEL_DATA_KEY, true);
+        $cancelled = 'on' === $cancelled ? 'CANCELLED' : '';
         switch ($column) {
-            case 'year':
-                echo $year;
-                break;
+        case 'year':
+            echo $year;
+            break;
+        case 'cancelled':
+            echo $cancelled;
+            break;
         }
 
     } // custom_column
