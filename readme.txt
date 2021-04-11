@@ -1,9 +1,9 @@
 === NSRU Options Plugin ===
 Contributors: martin.wedepohl@shaw.ca
 Requires at least: 4.0
-Tested up to: 5.2
+Tested up to: 7.6
 Requires PHP: 5.6
-Stable tag: 1.0.4
+Stable tag: 1.0.7
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,16 @@ Answer to foo bar dilemma.
 
 
 == Changelog ==
+
+= 1.0.7 2021-04-10 =
+* Updated instructions
+* Meetings publish date are the date of the meeting
+* Display future/published meetings
+* Formatting
+
+= 1.0.6 2021-03-01 =
+* Give the ability for Round Ups to be cancelled through the past chairs page. Update the number of the round up taking into account cancelled events.
+
 = 1.0.5 2019-12-30 =
 * Added easy way to set the primary color
 * Enqueue CSS in header rather than having to enter custom CSS
