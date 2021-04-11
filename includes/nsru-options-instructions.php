@@ -35,11 +35,8 @@
             <li>Duplicator - Backup/Migrate (Recommended)</li>
             <li>Elementor - Drag and Drop page builder <strong>(REQUIRED)</strong></li>
             <li>NSRU Options Plugin - Options customized for NSRU Theme <strong>(REQUIRED)</strong></li>
-            <li>Post Types Order - Drag and Drop reordering of posts (Recommended)</li>
-            <li>Simple Page Ordering - Drag and Drop page reordering for correct top level menu order (Recommended)</li>
             <li>Smush - Image compression (Recommended)</li>
             <li>WP Super Cache - WordPress caching (Recommended)</li>
-            <li>WP-Optimize - Database optimization (Recommended)</li>
             <li>Yoast SEO - All in one SEO (Recommended)</li>
         </ul>
     </div><!-- #Overview -->

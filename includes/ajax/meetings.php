@@ -19,9 +19,9 @@ defined('ABSPATH') or die('');
 $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 
 switch ($action) {
-    case 'get_meetings':
-        nsru_meetings();
-        break;
+	case 'get_meetings':
+		nsru_meetings();
+		break;
 }
 
 /**
@@ -34,17 +34,17 @@ switch ($action) {
  */
 function nsru_meeting_cmp($a, $b) {
 
-    $retval = $a['start_time'] - $b['start_time'];
-    if (0 == $retval) {
-        // Start times are the same check stop time
-        $retval = $a['stop_time'] - $b['stop_time'];
-        if (0 == $retval) {
-            // Stop times are the same check rooms
-            $retval = strcmp($a['room'], $b['room']);
-        }
-    }
+	$retval = $a['start_time'] - $b['start_time'];
+	if (0 == $retval) {
+		// Start times are the same check stop time
+		$retval = $a['stop_time'] - $b['stop_time'];
+		if (0 == $retval) {
+			// Stop times are the same check rooms
+			$retval = strcmp($a['room'], $b['room']);
+		}
+	}
 
-    return $retval;
+	return $retval;
 
 } // nsru_meeting_cmp
 
@@ -55,90 +55,90 @@ function nsru_meeting_cmp($a, $b) {
  */
 function nsru_meetings() {
 
-    $round_up_options = get_option('round_up_options');
+	$round_up_options = get_option('round_up_options');
 
-    // Get all the meeting posts
-    $posts = get_posts(
-        array(
-            'post_type'   => 'nsru_meetings',
-            'post_status' => 'publish',
-            'numberposts' => -1,
-            'order'       => 'ASC',
-        )
-    );
+	// Get all the meeting posts
+	$posts = get_posts(
+		array(
+			'post_type'   => 'nsru_meetings',
+			'post_status' => array( 'publish', 'future' ),
+			'numberposts' => -1,
+			'order'       => 'ASC',
+		)
+	);
 
-    $meetings_array = array();
+	$meetings_array = array();
 
-    // Loop through all of the posts
-    foreach ($posts as $post) {
-        $title     = get_the_title($post->ID);
-        $meta      = get_post_meta($post->ID, NSRU_Meetings::GetMetaKey(), true);
-        $stop_time = $meta['stop_time'];
-        if (':' === $stop_time) {
-            $stop_time = 0;
-        } else {
-            $stop_time = strtotime($stop_time);
-        }
-        $room = $meta['room'];
-        if ('' !== $room) {
-            $room = get_the_title($meta['room']);
-        }
-        $meetings_array[strtotime($meta['meeting_date'])][] = array(
-            'start_time' => strtotime($meta['start_time']),
-            'stop_time'  => $stop_time,
-            'title'      => $title,
-            'topic'      => $meta['topic'],
-            'speakers'   => $meta['speakers'],
-            'hosted_by'  => $meta['hosted_by'],
-            'room'       => $room,
-        );
-    }
+	// Loop through all of the posts
+	foreach ($posts as $post) {
+		$title     = get_the_title($post->ID);
+		$meta      = get_post_meta($post->ID, NSRU_Meetings::GetMetaKey(), true);
+		$stop_time = $meta['stop_time'];
+		if (':' === $stop_time) {
+			$stop_time = 0;
+		} else {
+			$stop_time = strtotime($stop_time);
+		}
+		$room = $meta['room'];
+		if ('' !== $room) {
+			$room = get_the_title($meta['room']);
+		}
+		$meetings_array[strtotime($meta['meeting_date'])][] = array(
+			'start_time' => strtotime($meta['start_time']),
+			'stop_time'  => $stop_time,
+			'title'      => $title,
+			'topic'      => $meta['topic'],
+			'speakers'   => $meta['speakers'],
+			'hosted_by'  => $meta['hosted_by'],
+			'room'       => $room,
+		);
+	}
 
-    ksort($meetings_array);                 // Sort array based on meeting date
+	ksort($meetings_array);                 // Sort array based on meeting date
 
-    // Sort each day basaed on start/stop/rooms
-    foreach ($meetings_array as $key => $meetings) {
-        usort($meetings, 'nsru_meeting_cmp');
-        $meetings_array[$key] = $meetings;
-    }
+	// Sort each day basaed on start/stop/rooms
+	foreach ($meetings_array as $key => $meetings) {
+		usort($meetings, 'nsru_meeting_cmp');
+		$meetings_array[$key] = $meetings;
+	}
 
-    /**
-     * Create a table for each of the days of the Round Up
-     * Column 1 will be the time of the meeting
-     * Column 2 will be the meeting information
-     * Column 3 will be the room of the meeting
-     */
-    $retstr = '';
-    foreach ($meetings_array as $key => $meetings) {
-        $retstr .= '<table><thead><tr><th colspan="3">' . date('l F jS', $key) . '</th></tr></thead><tbody>';
+	/**
+	 * Create a table for each of the days of the Round Up
+	 * Column 1 will be the time of the meeting
+	 * Column 2 will be the meeting information
+	 * Column 3 will be the room of the meeting
+	 */
+	$retstr = '';
+	foreach ($meetings_array as $key => $meetings) {
+		$retstr .= '<table><thead><tr><th colspan="3">' . date('l F jS', $key) . '</th></tr></thead><tbody>';
 
-        foreach ($meetings as $meeting) {
-            $start_time = date('g:i a', $meeting['start_time']);
-            if ($meeting['stop_time'] > 0) {
-                $stop_time = date('g:i a', $meeting['stop_time']);
-                if ('12:00 am' === $stop_time) {
-                    $stop_time = ' - ' . __('Midnight', 'nsru-options');
-                } else {
-                    $stop_time = ' - ' . $stop_time;
-                }
-            } else {
-                $stop_time = '';
-            }
-            $info    = $meeting['title'];
-            $info   .= ('' === $meeting['topic'])     ? '' : '<br />' . $meeting['topic'];
-            $info   .= ('' === $meeting['speakers'])  ? '' : '<br />' . $meeting['speakers'];
-            $info   .= ('' === $meeting['hosted_by']) ? '' : '<br />' . $meeting['hosted_by'];
+		foreach ($meetings as $meeting) {
+			$start_time = date('g:i a', $meeting['start_time']);
+			if ($meeting['stop_time'] > 0) {
+				$stop_time = date('g:i a', $meeting['stop_time']);
+				if ('12:00 am' === $stop_time) {
+					$stop_time = ' - ' . __('Midnight', 'nsru-options');
+				} else {
+					$stop_time = ' - ' . $stop_time;
+				}
+			} else {
+				$stop_time = '';
+			}
+			$info    = $meeting['title'];
+			$info   .= ('' === $meeting['topic'])     ? '' : '<br />' . $meeting['topic'];
+			$info   .= ('' === $meeting['speakers'])  ? '' : '<br />' . $meeting['speakers'];
+			$info   .= ('' === $meeting['hosted_by']) ? '' : '<br />' . $meeting['hosted_by'];
 
-            $retstr .= '<tr><td>' . $start_time . $stop_time . '</td>';
-            $retstr .= '<td>'     . $info                    . '</td>';
-            $retstr .= '<td>'     . $meeting['room']         . '</td></tr>';
-        }
-        $retstr .= '</tbody></table>';
-    }
+			$retstr .= '<tr><td>' . $start_time . $stop_time . '</td>';
+			$retstr .= '<td>'     . $info                    . '</td>';
+			$retstr .= '<td>'     . $meeting['room']         . '</td></tr>';
+		}
+		$retstr .= '</tbody></table>';
+	}
 
-    header('Content-type: application/json');
-    echo json_encode($retstr);
+	header('Content-type: application/json');
+	echo json_encode($retstr);
 
-    die();
+	die();
 
 } // nsru_meetings
