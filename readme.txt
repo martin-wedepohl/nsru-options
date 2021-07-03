@@ -3,7 +3,7 @@ Contributors: martin.wedepohl@shaw.ca
 Requires at least: 4.0
 Tested up to: 7.6
 Requires PHP: 5.6
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,9 @@ Answer to foo bar dilemma.
 
 
 == Changelog ==
+
+= 1.0.8 2021-07-03 =
+* If there are no speakers or meetings display a message
 
 = 1.0.7 2021-04-10 =
 * Updated instructions

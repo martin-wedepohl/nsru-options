@@ -136,6 +136,10 @@ function nsru_meetings() {
 		$retstr .= '</tbody></table>';
 	}
 
+	if ('' === $retstr) {
+		$retstr = 'We are currently planning the schedule<br>Please check back later for a list of meetings';
+	}
+
 	header('Content-type: application/json');
 	echo json_encode($retstr);
 

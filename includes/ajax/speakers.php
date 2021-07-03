@@ -57,6 +57,10 @@ function nsru_speakers() {
         }
     }
 
+    if ('' === $retstr) {
+        $retstr = 'We are currently planning the speakers<br>Please check back later for a list of speakers';
+    }
+
     header('Content-type: application/json');
     echo json_encode($retstr);
 
