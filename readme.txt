@@ -33,6 +33,10 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
+= 1.0.9 2021-10-13 =
+* Enhancement - NSRU Year now to display current year
+* Enhancement - Committee members displayed by menu order
+
 = 1.0.8 2021-07-03 =
 * If there are no speakers or meetings display a message
 
