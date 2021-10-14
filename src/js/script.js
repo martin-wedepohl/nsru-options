@@ -101,6 +101,23 @@ jQuery(document).ready(function ($) {
         });
     }
 
+    if(null !== document.querySelector('.now_year')) {
+        $.ajax({
+            url: '/wp-admin/admin-ajax.php', 
+            data: {action: 'get_now_year'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.now_year').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            },
+            error: function ($result) {
+                console.log($result);
+            }
+        });
+    }
+
     if(null !== document.querySelector('.meetings')) {
         $.ajax({
             url: '/wp-admin/admin-ajax.php', 

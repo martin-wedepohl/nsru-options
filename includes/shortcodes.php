@@ -61,6 +61,8 @@ class NSRU_shortcodes {
             return '<span class="first_year"></span>';
         } elseif ( 'current' === $a['type'] ) {
             return '<span class="current_year"></span>';
+        } elseif ( 'now' === $a['type'] ) {
+            return '<span class="now_year"></span>';
         }
 
     } // nsru_get_year_shortcode

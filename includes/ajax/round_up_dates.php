@@ -30,6 +30,9 @@ switch ($action) {
     case 'get_first_year':
         nsru_get_year_e('first');
         break;
+    case 'get_now_year':
+        nsru_get_year_e('now');
+        break;
     case 'get_year':
         nsru_get_year_e('current');
         break;
@@ -78,6 +81,9 @@ function nsru_get_year($type) {
         $start_date = is_array($round_up_options) ? ( array_key_exists('start_date', $round_up_options) ? $round_up_options['start_date'] : '' ) : '';
         date_default_timezone_set(get_option('timezone_string'));
         $year = date('Y', strtotime($start_date));
+    } elseif ('now' === $type) {
+        date_default_timezone_set(get_option('timezone_string'));
+        $year = date('Y');
     }
 
     return $year;

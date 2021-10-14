@@ -33,6 +33,8 @@ class NSRU_Committee {
         add_action('save_post', array($this, 'save_meta_box_data'));
         add_filter('manage_nsru_committee_posts_columns', array($this, 'set_custom_edit_columns'));
         add_action('manage_nsru_committee_posts_custom_column', array($this, 'custom_column'), 10, 2);
+        add_filter('manage_edit-nsru_committee_sortable_columns', array($this, 'sort_columns'));
+        add_action('pre_get_posts', array($this, 'order_columns'));
 
     } // __construct
 
@@ -58,7 +60,7 @@ class NSRU_Committee {
 
         global $wp_version;
 
-        $supports = array('title');
+        $supports = array('title', 'page-attributes');
 
         $labels = array(
             'name'               => __('Committee Members', 'nsru-options'),
@@ -210,6 +212,7 @@ class NSRU_Committee {
 
         $columns['name']  = __('Name',  'nsru-options');
         $columns['group'] = __('Group', 'nsru-options');
+        $columns['order'] = __('Order', 'nsru-options');
         $columns['date']  = __('Date',  'nsru-options');
 
         return $columns;
@@ -224,6 +227,7 @@ class NSRU_Committee {
      */
     public function custom_column($column, $post_id) {
 
+        $post = get_post($post_id, 'ARRAY_A');
         $meta = get_post_meta($post_id, NSRU_Committee::$META_DATA_KEY);
         switch ($column) {
             case 'name':
@@ -240,9 +244,39 @@ class NSRU_Committee {
                 }
                 echo $group;
                 break;
+            case 'order':
+                $order = $post['menu_order'];
+                echo $order;
         }
 
     } // custom_column
+
+    /**
+     * Add sortable header for admin columns.
+     */
+    public function sort_columns( $columns ) {
+
+        $columns['order'] = 'menu_order';
+        return $columns;
+
+    } // sort_colums
+
+    /**
+     * Sort the admin columns.
+     */
+    public function order_columns($query) {
+
+        if ( ! is_admin() || ! $query->is_main_query() ) {
+            return;
+        }
+
+        if ('menu_order' === $query->get('orderby') ) {
+            $query->set('orderby', 'menu_order');
+        }
+
+    } // order_colums
+
+
 
 } // class NSRU_Committee
 

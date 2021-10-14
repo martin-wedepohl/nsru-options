@@ -34,7 +34,8 @@ function nsru_committee() {
         'post_type'   => 'nsru_committee',
         'post_status' => 'publish',
         'numberposts' => -1,
-        'order'       => 'DESC',
+        'orderby'     => 'menu_order',
+        'order'       => 'ASC',
     ));
 
     $retstr = '<div class="committee"><table><tbody>';
