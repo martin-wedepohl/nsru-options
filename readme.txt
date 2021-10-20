@@ -33,6 +33,12 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
+= 1.0.10 2021-10-19 =
+* FIX - AlAnon should be Al-Anon
+* Enhancement - Schedule uses suffix for nth day
+* Enhancement - Formatting for hotel prices
+* Enhancement - Early bird prices end on the last day
+
 = 1.0.9 2021-10-13 =
 * Enhancement - NSRU Year now to display current year
 * Enhancement - Committee members displayed by menu order

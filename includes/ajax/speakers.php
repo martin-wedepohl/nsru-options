@@ -47,7 +47,7 @@ function nsru_speakers() {
                     $org = __('(AA)', 'nsru-options');
                     break;
                 case NSRU_Speakers::GetAlAnonValue():
-                    $org = __('(AlAnon)', 'nsru-options');
+                    $org = __('(Al-Anon)', 'nsru-options');
                     break;
                 default:
                     $org = '';

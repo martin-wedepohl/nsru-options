@@ -189,7 +189,7 @@ class NSRU_Speakers {
                     <select id="speaker_org" name="org" class="regular-text">
                         <option value="<?php echo NSRU_Speakers::$NO_ORG; ?>"     <?php echo (NSRU_Speakers::$NO_ORG === $org)     ? 'selected' : '' ?>><?php echo __('Select an organization', 'nsru-options'); ?></option>
                         <option value="<?php echo NSRU_Speakers::$AA_ORG; ?>"     <?php echo (NSRU_Speakers::$AA_ORG === $org)     ? 'selected' : '' ?>><?php echo __('AA', 'nsru-options'); ?></option>
-                        <option value="<?php echo NSRU_Speakers::$ALANON_ORG; ?>" <?php echo (NSRU_Speakers::$ALANON_ORG === $org) ? 'selected' : '' ?>><?php echo __('AlAnon', 'nsru-options'); ?></option>
+                        <option value="<?php echo NSRU_Speakers::$ALANON_ORG; ?>" <?php echo (NSRU_Speakers::$ALANON_ORG === $org) ? 'selected' : '' ?>><?php echo __('Al-Anon', 'nsru-options'); ?></option>
                     </select>
                 </td>
             </tr>
@@ -287,7 +287,7 @@ class NSRU_Speakers {
                 if (NSRU_Speakers::$AA_ORG === $org) {
                     echo __('AA', 'nsru-options');
                 } elseif (NSRU_Speakers::$ALANON_ORG === $org) {
-                    echo __('AlAnon', 'nsru-options');
+                    echo __('Al-Anon', 'nsru-options');
                 } else {
                     echo '';
                 }

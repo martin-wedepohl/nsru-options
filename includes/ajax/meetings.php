@@ -110,7 +110,9 @@ function nsru_meetings() {
 	 */
 	$retstr = '';
 	foreach ($meetings_array as $key => $meetings) {
-		$retstr .= '<table><thead><tr><th colspan="3">' . date('l F jS', $key) . '</th></tr></thead><tbody>';
+		$day = date('l F j', $key);
+		$suffix = date('S');
+		$retstr .= '<table><thead><tr><th colspan="3">' . $day . '<sup>' . $suffix . '</sup></th></tr></thead><tbody>';
 
 		foreach ($meetings as $meeting) {
 			$start_time = date('g:i a', $meeting['start_time']);

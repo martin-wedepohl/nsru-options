@@ -431,19 +431,20 @@ function nsru_price() {
         // If there is no end date then there is no discounted tickets
         $end_date_ts = strtotime( 'now - 1 day' );
     } else {
-        $end_date_ts = strtotime( $end_date . ' + 1 day' );
+        $end_date_ts = strtotime( $end_date );
     }
 
     $now_ts = time();
 
     $price  = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price', $round_up_options ) ? $round_up_options['ticket_price'] : '' ) : '';
-    $retstr = 'The cost to attend the North Shore Round Up will be $' . $price . '.';
+    $retstr = '<div class="ticket-prices">In person ticket price for this (3) day event is $' . $price . '.';
     if ( $now_ts < $end_date_ts ) {
         // Discounted prices are in effect
         $end_date = date('F j, Y', $end_date_ts);
         $price    = is_array( $round_up_options ) ? ( array_key_exists( 'ticket_price_discount', $round_up_options ) ? $round_up_options['ticket_price_discount'] : '' ) : '';
-        $retstr  .= "<br /><strong>NOTE:</strong> Tickets are on sale for the discounted price of $$price if you purchase them <strong>before</strong> $end_date.";
+        $retstr  .= "<p class='ticket-discount'><span class='early-bird'>EARLY</span> Bird pricing is $$price <span class='early-only'>ONLY</span> until $end_date.</p>";
     }
+    $retstr .= '</div>';
 
     header('Content-type: application/json');
     echo json_encode($retstr);
