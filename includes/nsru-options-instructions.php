@@ -58,6 +58,15 @@
             The Theme has been set up to use the same color for the top header bar, titles and clickable links.
             Since the color changes from Round Up year to year it needs to be customized each year.
         </p>
+        <ul class="wantdisc">
+            <li>Appearance</li>
+            <li>Customize</li>
+            <li>Additional CSS</li>
+        </ul>
+        <p>Change the following:</p>
+        <p>--nsru-primary-clr: HEX-COLOR-CODE-FOR-PRIMARY;</p>
+	    <p>--nsru-accent-clr: HEX-COLOR-CODE-FOR-ACCENT;</p>
+
         <h4>Menus</h4>
         <p>On the Dashboard Menu do the following:</p>
         <ul class="wantdisc">
