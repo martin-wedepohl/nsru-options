@@ -3,7 +3,7 @@
  * Plugin Name: NSRU Options Plugin
  * Plugin URI:  https://github.com/martin-wedepohl/nsru-options
  * Description: North Shore Round Up Options
- * Version:     1.0.11
+ * Version:     1.0.12
  * Author:      martin.wedepohl@shaw.ca
  * Author URI:  http://wedepohlengineering.com
  * License:     GPL3

@@ -402,7 +402,13 @@
         <p>The price will be based on the date and will return if there is a discount or not</p>
         <p>Attributes: - NOT USED</p>
         <p>Content: - NOT USED</p>
-        <p>eg: [nsru_get_price] - Will return '45'</p>
+        <p>
+            eg: [nsru_get_price] - Will return <br>
+            '&lt;div class="ticket-prices"&gt;<br>
+            In person ticket price for this (3) day event is $TICKET_PRICE<br>
+            &lt;p class="ticket-discount"&gt;&lt;span class="early-bird">EARLY&lt;/span&gt; Bird pricing is $DISCOUNT_PRICE &lt;span class="early-only"&gt;ONLY&lt;/span&gt; until DISCOUNT_END_DATE.&lt;/p&gt;<br>
+            &lt;/div&gt;'
+        </p>
         
         <hr />
         <p><strong>nsru_get_speakers</strong> - Formatted table of main speakers in the Round Up</p>
