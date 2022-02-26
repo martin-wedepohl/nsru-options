@@ -3,7 +3,7 @@ Contributors: martin.wedepohl@shaw.ca
 Requires at least: 4.0
 Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,9 @@ Answer to foo bar dilemma.
 
 
 == Changelog ==
+
+= 1.0.13 2022-02-25 =
+* Added Square codes
 
 = 1.0.12 2021-11-15 =
 * Better instructions

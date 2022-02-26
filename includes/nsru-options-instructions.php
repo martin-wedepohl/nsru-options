@@ -157,6 +157,10 @@
                 When disabled it will show instructions on how to pick up the tickets at the Round Up.
             </li>
             <li>
+                <strong>Enable Square Button:</strong> This enables or disables the Square purchase button.<br />
+                When disabled it will show instructions on how to pick up the tickets at the Round Up.
+            </li>
+            <li>
                 <strong>Enable Deluxe Hotel Rooms:</strong> This enables or disables the Deluxe Rooms.<br />
                 When disabled it will show a message that the rooms are sold out.
             </li>
@@ -188,10 +192,14 @@
         <p>This section is used to enter the ticket price, PayPal surcharge and PayPal Purchase Code.</p>
         <ul class="wantdisc">
             <li><strong>Ticket price for Round Up ($)</strong> Actual ticket price in dollars</li>
-            <li><strong>PayPal Surcharge ($)</strong> PayPal surcharge for buying tickets on-line</li>
+            <li><strong>Surcharge ($)</strong> Surcharge for buying tickets on-line</li>
             <li>
                 <strong>PayPal Purchase Code</strong> PayPal purchase code found in the hosted_button_id value
                 when the PayPal Buy Now button is generated.  This code will re-create the PayPal Buy Now button.
+            </li>
+            <li>
+                <strong>Square Purchase Code</strong> Square purchase code found in the square.link value
+                when the Square Buy Now button is generated.  This code will re-create the Square Buy Now button.
             </li>
         </ul>
 
@@ -212,6 +220,16 @@
             <li>
                 <strong>PayPal Discount Purchase Code</strong> PayPal purchase code found in the hosted_button_id value
                 when the PayPal Buy Now button is generated.  This code will re-create the PayPal Buy Now button.
+            </li>
+        </ul>
+
+        <hr />
+        <h3>Round Up Scholarships</h3>
+        <p>This section is used to enter the scholarship price information.</p>
+        <ul class="wantdisc">
+            <li>
+                <strong>Square Scholarship Purchase Code</strong> Square scholarship purchase code found in the square.link value
+                when the Square Buy Now button is generated.  This code will re-create the Square Buy Now button.
             </li>
         </ul>
 
@@ -396,6 +414,20 @@
         <p>Attributes: - NOT USED</p>
         <p>Content: - NOT USED</p>
         <p>eg: [nsru_get_paypal]</p>
+        
+        <hr />
+        <p><strong>nsru_get_square</strong> - Square Buy Now Button</p>
+        <p>The button will be formatted as a normal Square Buy Now button with either the discounted or normal ticket price</p>
+        <p>Attributes: - NOT USED</p>
+        <p>Content: - NOT USED</p>
+        <p>eg: [nsru_get_square]</p>
+        
+        <hr />
+        <p><strong>nsru_get_scholarship</strong> - Square Scholarship Button</p>
+        <p>The button will be formatted as a normal Square Scholarship button with either the discounted or normal ticket price</p>
+        <p>Attributes: - NOT USED</p>
+        <p>Content: - NOT USED</p>
+        <p>eg: [nsru_get_scholarship]</p>
         
         <hr />
         <p><strong>nsru_get_price</strong> - Ticket price</p>

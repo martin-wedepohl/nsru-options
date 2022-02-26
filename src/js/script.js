@@ -172,6 +172,40 @@ jQuery(document).ready(function ($) {
         });
     }
     
+    if(null !== document.querySelector('.square')) {
+        $.ajax({
+            url: '/wp-admin/admin-ajax.php', 
+            data: {action: 'get_square'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.square').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            },
+            error: function ($result) {
+                console.log($result);
+            }
+        });
+    }
+    
+    if(null !== document.querySelector('.scholarship')) {
+        $.ajax({
+            url: '/wp-admin/admin-ajax.php', 
+            data: {action: 'get_scholarship'}, 
+            type: 'POST', 
+            success: function ($result) {
+                if ($result) {
+                    $('.scholarship').html($result);
+                    $( document.body ).trigger( 'post-load' );
+                }
+            },
+            error: function ($result) {
+                console.log($result);
+            }
+        });
+    }
+    
     if(null !== document.querySelector('.how_paypal_works')) {
         $.ajax({
             url: '/wp-admin/admin-ajax.php', 

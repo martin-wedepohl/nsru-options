@@ -3,7 +3,7 @@
  * Plugin Name: NSRU Options Plugin
  * Plugin URI:  https://github.com/martin-wedepohl/nsru-options
  * Description: North Shore Round Up Options
- * Version:     1.0.12
+ * Version:     1.0.13
  * Author:      martin.wedepohl@shaw.ca
  * Author URI:  http://wedepohlengineering.com
  * License:     GPL3
@@ -184,6 +184,12 @@ class NSRU_Options_Plugin {
 			'nsru-options'
 		);
 		add_settings_section(
+			'scholarship_section',
+			__( 'Round Up Scholarships', 'nsru-options' ),
+			array( $this, 'section_callback' ),
+			'nsru-options'
+		);
+		add_settings_section(
 			'location_section',
 			__( 'Round Up Location', 'nsru-options' ),
 			array( $this, 'section_callback' ),
@@ -227,6 +233,13 @@ class NSRU_Options_Plugin {
 			array(
 				'uid'     => 'paypal_enable',
 				'label'   => __( 'Enable PayPal Button', 'nsru-options' ),
+				'section' => 'enable_section',
+				'type'    => 'checkbox',
+				'options' => array( 1 => 'Yes' ),
+			),
+			array(
+				'uid'     => 'square_enable',
+				'label'   => __( 'Enable Square Button', 'nsru-options' ),
 				'section' => 'enable_section',
 				'type'    => 'checkbox',
 				'options' => array( 1 => 'Yes' ),
@@ -307,7 +320,7 @@ class NSRU_Options_Plugin {
 			),
 			array(
 				'uid'     => 'online_surcharge',
-				'label'   => __( 'PayPal Surcharge ($)', 'nsru-options' ),
+				'label'   => __( 'Online Surcharge ($)', 'nsru-options' ),
 				'section' => 'prices_section',
 				'type'    => 'number',
 				'min'     => 0,
@@ -322,6 +335,14 @@ class NSRU_Options_Plugin {
 				'type'         => 'text',
 				'class'        => 'regular-text',
 				'supplimental' => __( 'Found in the hosted_button_id value of the PayPal Buy Now button' ),
+			),
+			array(
+				'uid'          => 'square_code',
+				'label'        => __( 'Square Purchase Code', 'nsru-options' ),
+				'section'      => 'prices_section',
+				'type'         => 'text',
+				'class'        => 'regular-text',
+				'supplimental' => __( 'Found in the square.link value of the Square Buy Now button' ),
 			),
 			array(
 				'uid'     => 'discount_end_date',
@@ -343,7 +364,7 @@ class NSRU_Options_Plugin {
 			),
 			array(
 				'uid'     => 'online_surcharge_discount',
-				'label'   => __( 'Discount Ticket PayPal Surcharge ($)', 'nsru-options' ),
+				'label'   => __( 'Discount Ticket Online Surcharge ($)', 'nsru-options' ),
 				'section' => 'discounts_section',
 				'type'    => 'number',
 				'min'     => 0,
@@ -358,6 +379,22 @@ class NSRU_Options_Plugin {
 				'type'         => 'text',
 				'class'        => 'regular-text',
 				'supplimental' => __( 'Found in the hosted_button_id value of the PayPal Buy Now button' ),
+			),
+			array(
+				'uid'          => 'square_code_discount',
+				'label'        => __( 'Square Discount Purchase Code', 'nsru-options' ),
+				'section'      => 'discounts_section',
+				'type'         => 'text',
+				'class'        => 'regular-text',
+				'supplimental' => __( 'Found in the square.link value of the Square Buy Now button' ),
+			),
+			array(
+				'uid'          => 'square_code_scholarship',
+				'label'        => __( 'Square Scholarship Code', 'nsru-options' ),
+				'section'      => 'scholarship_section',
+				'type'         => 'text',
+				'class'        => 'regular-text',
+				'supplimental' => __( 'Found in the square.link value of the Square Buy Now button' ),
 			),
 			array(
 				'uid'     => 'location_name',
