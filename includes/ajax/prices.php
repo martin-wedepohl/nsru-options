@@ -44,7 +44,7 @@ function nsru_room_rates( $type ) {
         $hotel_harbour_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_harbour_enable', $round_up_options ) ? intval($round_up_options['hotel_harbour_enable']) : 0 ) : 0;
         if('' !== $price) {
             if(1 === $hotel_harbour_enable) {
-                $hotel_price = "$$price/night Delux Room - Harbour View";
+                $hotel_price = "$$price/night Deluxe Room - Harbour View";
             } else {
                 $hotel_price = '<span class="harbour-rooms-sold-out">Deluxe Rooms with Harbour View are fully sold out!</span>';
             }
@@ -54,7 +54,7 @@ function nsru_room_rates( $type ) {
         $hotel_enable = is_array( $round_up_options ) ? ( array_key_exists( 'hotel_enable', $round_up_options ) ? intval($round_up_options['hotel_enable']) : 0 ) : 0;
         if('' !== $price) {
             if(1 === $hotel_enable) {
-                $hotel_price = "$$price/night Delux Room";
+                $hotel_price = "$$price/night Deluxe Room";
             } else {
                 $hotel_price = '<span class="deluxe-rooms-sold-out">Deluxe Rooms are fully sold out</span>';
             }

@@ -3,7 +3,7 @@ Contributors: martin.wedepohl@shaw.ca
 Requires at least: 4.0
 Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,9 @@ Answer to foo bar dilemma.
 
 
 == Changelog ==
+
+= 1.0.14 2023-01-05 =
+* FIX - Typo in spelling of Deluxe
 
 = 1.0.13 2022-02-25 =
 * Added Square codes
